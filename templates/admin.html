@@ -1,0 +1,70 @@
+{% extends "layout.html" %}{% block body %}
+<h2>后台管理</h2>
+<p class="muted">当前管理员：{{ user.username }} | 当前信号条数：{{ signal_count }}</p>
+
+<h3>上传真实选股结果</h3>
+<div class="card">
+  <form method="post" action="{{ url_for('upload_signals') }}" enctype="multipart/form-data" class="form">
+    <label>上传 latest_signals.json<input type="file" name="signals_file" accept=".json" required></label>
+    <button class="btn primary" type="submit">上传并覆盖当前信号</button>
+  </form>
+  <p class="muted">建议直接上传 V1/V2 生成的 data/latest_signals.json。上传成功后，前台数据页会立即使用新数据。</p>
+</div>
+
+<h3>待处理支付申请</h3>
+<div class="card">
+  <table>
+    <thead>
+      <tr><th>ID</th><th>用户</th><th>套餐</th><th>付款人</th><th>备注</th><th>状态</th><th>操作</th></tr>
+    </thead>
+    <tbody>
+      {% for p in payments %}
+      <tr>
+        <td>{{ p.id }}</td>
+        <td>{{ p.username }}</td>
+        <td>{{ plans[p.plan_code].name if p.plan_code in plans else p.plan_code }}</td>
+        <td>{{ p.payer_name or '' }}</td>
+        <td>{{ p.payer_note or '' }}</td>
+        <td>{{ p.status }}</td>
+        <td>
+          {% if p.status == 'pending' %}
+          <form method="post" action="{{ url_for('approve', payment_id=p.id, plan_code=p.plan_code) }}" style="display:inline">
+            <button class="btn small primary" type="submit">开通权限</button>
+          </form>
+          <form method="post" action="{{ url_for('reject', payment_id=p.id) }}" style="display:inline">
+            <button class="btn small" type="submit">拒绝</button>
+          </form>
+          {% else %}
+          已处理
+          {% endif %}
+        </td>
+      </tr>
+      {% else %}
+      <tr><td colspan="7">暂无支付申请</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<h3>用户列表</h3>
+<div class="card">
+  <table>
+    <thead>
+      <tr><th>用户名</th><th>角色</th><th>套餐</th><th>到期时间</th><th>注册时间</th></tr>
+    </thead>
+    <tbody>
+      {% for u in users %}
+      <tr>
+        <td>{{ u.username }}</td>
+        <td>{{ u.role }}</td>
+        <td>{{ u.membership_plan }}</td>
+        <td>{{ u.membership_expires_at or '' }}</td>
+        <td>{{ u.created_at }}</td>
+      </tr>
+      {% else %}
+      <tr><td colspan="5">暂无用户</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

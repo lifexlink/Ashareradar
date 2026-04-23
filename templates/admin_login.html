@@ -1,0 +1,11 @@
+{% extends "layout.html" %}{% block body %}
+<div class="auth-card">
+  <h2>管理员登录</h2>
+  <form method="post" class="form">
+    <label>管理员用户名<input name="username" required></label>
+    <label>密码<input name="password" type="password" required></label>
+    <button class="btn primary" type="submit">进入后台</button>
+  </form>
+  <p class="muted">默认管理员：admin / admin123</p>
+</div>
+{% endblock %}
