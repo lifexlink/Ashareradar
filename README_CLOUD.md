@@ -51,3 +51,10 @@ PORT=5001 python app.py
 ## 注意
 `cloud_update/generate_signals_cloud.py` 里当前是“简化版自动评分 + 演示回退”。
 如果你要完全沿用 V1/V2 的逻辑，可以把 V1/V2 的核心评分逻辑替换进这个脚本。
+
+
+## V5.1 修复说明
+- 修复 Railway/Render 云端注册时报 Internal Server Error 的问题。
+- 原因：云端使用 `gunicorn app:app` 启动时不会执行 `python init_db.py`。
+- 解决：在 `app.py` 被 gunicorn 加载时自动执行 `init_db()`。
+- 新增 `/health` 检查入口，用于确认数据库是否正常初始化。

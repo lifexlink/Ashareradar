@@ -333,6 +333,18 @@ def upload_signals():
         flash(f"上传失败：{e}")
     return redirect(url_for("admin"))
 
+@app.route("/health")
+def health():
+    try:
+        conn = get_conn()
+        cur = conn.cursor()
+        cur.execute("SELECT COUNT(*) AS n FROM users")
+        n = cur.fetchone()["n"]
+        conn.close()
+        return {"status": "ok", "users": n}
+    except Exception as e:
+        return {"status": "error", "message": str(e)}, 500
+
 @app.route("/api/signals")
 @login_required
 def api_signals():
@@ -341,7 +353,10 @@ def api_signals():
     visible = signals if is_paid(user) else signals[:3]
     return jsonify(visible)
 
+# Railway / Render 使用 gunicorn app:app 启动时，不会执行 init_db.py。
+# 所以这里在模块加载时自动初始化数据库，避免线上注册时报 users 表不存在。
+init_db()
+
 if __name__ == "__main__":
-    init_db()
     port = int(os.environ.get("PORT", "5000"))
     app.run(host="0.0.0.0", port=port, debug=True)
