@@ -283,10 +283,24 @@ def pay(plan_code):
         payer_name = request.form.get("payer_name", "").strip()
         payer_note = request.form.get("payer_note", "").strip()
         payment_method = request.form.get("payment_method", "manual_qr").strip() or "manual_qr"
-        order_no = make_order_no()
-
         conn = get_conn()
         cur = conn.cursor()
+
+        # 防重复提交：同一用户同一套餐，3分钟内已有待审核订单则不新建
+        cutoff = (now() - timedelta(minutes=3)).isoformat()
+        cur.execute(
+            """SELECT * FROM orders
+               WHERE username = ? AND plan_code = ? AND status = 'pending' AND created_at >= ?
+               ORDER BY id DESC LIMIT 1""",
+            (user["username"], plan_code, cutoff)
+        )
+        existing_order = cur.fetchone()
+        if existing_order:
+            conn.close()
+            flash(f"你刚刚已经提交过订单：{existing_order['order_no']}，请勿重复提交。")
+            return redirect(url_for("orders"))
+
+        order_no = make_order_no()
         cur.execute(
             """INSERT INTO orders
                (order_no, username, plan_code, plan_name, amount, payment_method, payer_name, payer_note, status, created_at)
@@ -408,7 +422,21 @@ def health():
         cur.execute("SELECT COUNT(*) AS n FROM orders")
         o = cur.fetchone()["n"]
         conn.close()
-        return {"status": "ok", "users": n, "orders": o}
+        signals = load_signals()
+        source = "unknown"
+        generated_at = None
+        if os.path.exists(DATA_PATH):
+            try:
+                with open(DATA_PATH, "r", encoding="utf-8") as f:
+                    payload = json.load(f)
+                    if isinstance(payload, dict):
+                        source = payload.get("source", "dict")
+                        generated_at = payload.get("generated_at")
+                    else:
+                        source = "list"
+            except Exception:
+                source = "unreadable"
+        return {"status": "ok", "users": n, "orders": o, "signals": len(signals), "source": source, "generated_at": generated_at}
     except Exception as e:
         return {"status": "error", "message": str(e)}, 500
 
