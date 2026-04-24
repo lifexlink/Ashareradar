@@ -78,8 +78,10 @@ def save_uploaded_signals(file_storage):
         parsed = json.loads(raw.decode("utf-8"))
     except Exception as e:
         raise ValueError(f"JSON 解析失败: {e}")
+    if isinstance(parsed, dict) and "signals" in parsed:
+    parsed = parsed["signals"]
     if not isinstance(parsed, list):
-        raise ValueError("JSON 顶层必须是列表")
+    raise ValueError("JSON 顶层必须是列表，或包含 signals 字段")
     required_keys = {"rank", "code", "name", "score", "reason"}
     for idx, item in enumerate(parsed[:3]):
         if not isinstance(item, dict):
