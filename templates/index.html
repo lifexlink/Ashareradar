@@ -1,1 +1,85 @@
-{% extends "layout.html" %}{% block body %}<section class="hero"><div><h1>每天给你更聚焦的 A 股短线候选池</h1><p>不是“保证收益”的荐股页，而是可付费的热点扫描工具。先用 Demo，再决定是否开通周卡、月卡或年卡。</p><div class="cta-row">{% if session.get('user') %}<a class="btn primary" href="{{ url_for('dashboard') }}">进入数据页</a>{% else %}<a class="btn primary" href="{{ url_for('register') }}">立即注册</a>{% endif %}<a class="btn" href="{{ url_for('pricing') }}">查看套餐</a></div></div><div class="card"><div class="kpi">核心卖点</div><ul class="clean"><li>每日 Top10 候选池</li><li>免费用户先看前 3 只</li><li>付费后解锁完整榜单</li><li>后台手动开通，先卖起来</li></ul></div></section><section class="grid three">{% for key, plan in plans.items() %}<div class="card"><h3>{{ plan.name }}</h3><p class="price">{{ plan.price }}</p><p>适合先试用、验证、续费。</p><a class="btn" href="{{ url_for('pricing') }}">查看详情</a></div>{% endfor %}</section>{% endblock %}
+{% extends "layout.html" %}{% block body %}
+
+<section class="hero">
+  <div>
+    <h1>每日自动筛选A股强势候选池</h1>
+    <p>
+      帮你快速观察市场热点、强势股和短线情绪。
+      免费查看今日 Top3，开通后解锁完整 Top10。
+      本系统仅为数据筛选工具，非荐股，不承诺收益。
+    </p>
+
+    <div class="cta-row">
+      {% if session.get('user') %}
+      <a class="btn primary" href="{{ url_for('dashboard') }}">立即查看今日Top3</a>
+      {% else %}
+      <a class="btn primary" href="{{ url_for('register') }}">免费注册查看Top3</a>
+      {% endif %}
+      <a class="btn" href="{{ url_for('pricing') }}">开通完整Top10</a>
+    </div>
+
+    <p class="muted" style="margin-top:14px;">
+      内测阶段：周卡 ¥39，适合先体验一周。
+    </p>
+  </div>
+
+  <div class="card">
+    <div class="kpi">适合谁使用</div>
+    <ul class="clean">
+      <li>每天想快速看市场热点的人</li>
+      <li>关注强势股、短线情绪的人</li>
+      <li>不想手动翻大量股票的人</li>
+      <li>想用数据辅助观察，而不是盲目追涨的人</li>
+    </ul>
+  </div>
+</section>
+
+<section class="grid three">
+  <div class="card">
+    <h3>免费体验</h3>
+    <p class="price">¥0</p>
+    <p>注册即可查看今日 Top3 候选池。</p>
+    <a class="btn primary" href="{{ url_for('register') }}">免费开始</a>
+  </div>
+
+  <div class="card">
+    <h3>周卡内测</h3>
+    <p class="price">¥39</p>
+    <p>解锁完整 Top10，适合先体验一周。</p>
+    <a class="btn primary" href="{{ url_for('pricing') }}">开通周卡</a>
+  </div>
+
+  <div class="card">
+    <h3>月卡</h3>
+    <p class="price">¥129</p>
+    <p>适合持续观察热点与短线情绪。</p>
+    <a class="btn" href="{{ url_for('pricing') }}">查看套餐</a>
+  </div>
+</section>
+
+<section class="grid two" style="margin-top:22px;">
+  <div class="card">
+    <h2>你开通后能看到什么？</h2>
+    <ul class="clean">
+      <li>完整 Top10 候选池</li>
+      <li>每只股票的评分</li>
+      <li>简短筛选理由</li>
+      <li>订单系统与到期权限控制</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>重要风险提示</h2>
+    <p class="muted">
+      本系统不是荐股服务，不保证涨停，不承诺收益。
+      所有数据仅用于市场观察、热点跟踪和交易辅助参考。
+      投资有风险，请独立判断并控制仓位。
+    </p>
+    <p class="muted">
+      使用本系统即表示你已阅读并同意
+      <a href="{{ url_for('disclaimer') }}" style="color:#38bdf8;text-decoration:underline;">免责声明</a>。
+    </p>
+  </div>
+</section>
+
+{% endblock %}

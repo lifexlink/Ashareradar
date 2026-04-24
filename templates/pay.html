@@ -1,1 +1,71 @@
-{% extends "layout.html" %}{% block body %}<h2>{{ plan.name }}开通</h2><div class="grid two"><div class="card"><p class="price">{{ plan.price }}</p><p>先扫码付款，再提交付款备注。你在后台核对后即可开通。</p><div class="qr-wrap"><div><h4>微信收款码</h4><img class="qr" src="{{ url_for('static', filename='wechat_qr_placeholder.svg') }}" alt="wechat qr"></div><div><h4>支付宝收款码</h4><img class="qr" src="{{ url_for('static', filename='alipay_qr_placeholder.svg') }}" alt="alipay qr"></div></div></div><div class="card"><form method="post" class="form"><label>付款人昵称<input name="payer_name" placeholder="便于你核对到账"></label><label>付款备注<input name="payer_note" placeholder="如：尾号/金额/时间"></label><button class="btn primary" type="submit">我已付款，提交开通申请</button></form><p class="muted">后续你可以把这一步升级成自动支付回调。</p></div></div>{% endblock %}
+{% extends "layout.html" %}{% block body %}
+
+<h2>{{ plan.name }}开通</h2>
+
+<div class="notice" style="margin-bottom:18px;">
+  ⚠ 本服务仅提供数据筛选工具，不构成投资建议。开通即视为同意
+  <a href="{{ url_for('disclaimer') }}" style="color:#38bdf8;text-decoration:underline;">免责声明</a>。
+</div>
+
+<div class="grid two">
+  <div class="card">
+    <p class="price">{{ plan.price }}</p>
+
+    <h3>开通后你将获得：</h3>
+    <ul class="clean">
+      <li>完整 Top10 候选池</li>
+      <li>每只股票评分与筛选理由</li>
+      <li>适合短线、热点、情绪观察参考</li>
+      <li>会员期内可持续查看数据页</li>
+    </ul>
+
+    <p class="notice">
+      内测期建议先开通周卡体验。付款后提交订单，管理员核对到账后一键开通。
+    </p>
+
+    <div class="qr-wrap">
+      <div>
+        <h4>微信扫码支付</h4>
+        <img class="qr" src="{{ url_for('static', filename='wechat_qr_placeholder.svg') }}" alt="wechat qr">
+      </div>
+      <div>
+        <h4>支付宝扫码支付</h4>
+        <img class="qr" src="{{ url_for('static', filename='alipay_qr_placeholder.svg') }}" alt="alipay qr">
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>付款后提交订单</h3>
+    <p class="muted">
+      请填写付款昵称、付款方式和备注。系统会生成唯一订单号，方便你和管理员核对。
+    </p>
+
+    <form method="post" class="form">
+      <label>付款方式
+        <select name="payment_method">
+          <option value="wechat">微信支付</option>
+          <option value="alipay">支付宝</option>
+          <option value="other">其他</option>
+        </select>
+      </label>
+
+      <label>付款人昵称
+        <input name="payer_name" placeholder="例如：微信昵称 / 支付宝昵称">
+      </label>
+
+      <label>付款备注
+        <input name="payer_note" placeholder="例如：付款时间、转账尾号、备注文字">
+      </label>
+
+      <label style="display:flex;gap:10px;align-items:flex-start;font-size:13px;color:#9fb0d1;">
+        <input type="checkbox" required style="width:auto;margin-top:3px;">
+        <span>我已阅读并同意免责声明，理解本服务不构成投资建议。</span>
+      </label>
+
+      <button class="btn primary" type="submit">我已付款，生成订单并提交审核</button>
+    </form>
+  </div>
+</div>
+
+{% endblock %}

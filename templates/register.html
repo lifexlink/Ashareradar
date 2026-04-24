@@ -1,1 +1,27 @@
-{% extends "layout.html" %}{% block body %}<div class="auth-card"><h2>注册</h2><form method="post" class="form"><label>用户名<input name="username" required></label><label>密码<input name="password" type="password" required></label><button class="btn primary" type="submit">创建账号</button></form></div>{% endblock %}
+{% extends "layout.html" %}{% block body %}
+<div class="auth-card">
+  <h2>注册免费体验</h2>
+  <p class="muted">注册后可免费查看今日 Top3 候选池。完整 Top10 需开通会员。</p>
+
+  <form method="post" class="form">
+    <label>用户名
+      <input name="username" required placeholder="至少3位">
+    </label>
+
+    <label>密码
+      <input name="password" type="password" required placeholder="至少6位">
+    </label>
+
+    <label style="display:flex;gap:10px;align-items:flex-start;font-size:13px;color:#9fb0d1;">
+      <input type="checkbox" name="agree_disclaimer" value="yes" required style="width:auto;margin-top:3px;">
+      <span>
+        我已阅读并同意
+        <a href="{{ url_for('disclaimer') }}" target="_blank" style="color:#38bdf8;text-decoration:underline;">《免责声明与使用协议》</a>。
+        我理解本系统仅为数据筛选工具，不构成投资建议。
+      </span>
+    </label>
+
+    <button class="btn primary" type="submit">免费注册查看Top3</button>
+  </form>
+</div>
+{% endblock %}

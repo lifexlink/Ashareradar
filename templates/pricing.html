@@ -1,1 +1,39 @@
-{% extends "layout.html" %}{% block body %}<h2>会员套餐</h2><div class="grid three">{% for key, plan in plans.items() %}<div class="card"><h3>{{ plan.name }}</h3><p class="price">{{ plan.price }}</p><p>解锁完整 Top10、完整理由和后续升级功能。</p>{% if session.get('user') %}<a class="btn primary" href="{{ url_for('pay', plan_code=key) }}">立即开通</a>{% else %}<a class="btn primary" href="{{ url_for('login') }}">先登录后开通</a>{% endif %}</div>{% endfor %}</div>{% endblock %}
+{% extends "layout.html" %}{% block body %}
+
+<h2>选择会员套餐</h2>
+<p class="muted">建议先开通周卡体验。所有内容仅用于市场观察，不构成投资建议。</p>
+
+<div class="grid three">
+  {% for key, plan in plans.items() %}
+  <div class="card">
+    <h3>{{ plan.name }}</h3>
+    <p class="price">{{ plan.price }}</p>
+
+    {% if key == 'week' %}
+    <p>适合第一次体验，低成本查看完整 Top10。</p>
+    {% elif key == 'month' %}
+    <p>适合持续观察市场热点与短线情绪。</p>
+    {% else %}
+    <p>适合长期使用者，后续功能升级优先体验。</p>
+    {% endif %}
+
+    <ul class="clean">
+      <li>完整 Top10 候选池</li>
+      <li>候选理由与评分</li>
+      <li>会员期内持续查看</li>
+    </ul>
+
+    {% if session.get('user') %}
+      <a class="btn primary" href="{{ url_for('pay', plan_code=key) }}">立即开通</a>
+    {% else %}
+      <a class="btn primary" href="{{ url_for('login') }}">先登录后开通</a>
+    {% endif %}
+  </div>
+  {% endfor %}
+</div>
+
+<div class="notice">
+  ⚠ 本服务仅提供数据筛选与市场观察工具，不提供个股买卖建议，不承诺收益。
+</div>
+
+{% endblock %}

@@ -1,7 +1,6 @@
 from flask import Flask, render_template, request, redirect, session, url_for, flash, jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
-import sqlite3, json, os
-from werkzeug.utils import secure_filename
+import sqlite3, json, os, uuid
 from datetime import datetime, timedelta
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -13,9 +12,9 @@ app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "change-me-in-production")
 
 PLANS = {
-    "week": {"name": "周卡", "days": 7, "price": "¥99"},
-    "month": {"name": "月卡", "days": 30, "price": "¥299"},
-    "year": {"name": "年卡", "days": 365, "price": "¥1999"},
+    "week": {"name": "周卡", "days": 7, "price": "¥39", "amount": 39},
+    "month": {"name": "月卡", "days": 30, "price": "¥129", "amount": 129},
+    "year": {"name": "年卡", "days": 365, "price": "¥999", "amount": 999},
 }
 
 def now():
@@ -51,17 +50,34 @@ def init_db():
         created_at TEXT NOT NULL
     )
     """)
+    cur.execute("""
+    CREATE TABLE IF NOT EXISTS orders (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        order_no TEXT UNIQUE NOT NULL,
+        username TEXT NOT NULL,
+        plan_code TEXT NOT NULL,
+        plan_name TEXT NOT NULL,
+        amount INTEGER NOT NULL,
+        payment_method TEXT DEFAULT 'manual_qr',
+        payer_name TEXT,
+        payer_note TEXT,
+        status TEXT NOT NULL DEFAULT 'pending',
+        created_at TEXT NOT NULL,
+        approved_at TEXT,
+        rejected_at TEXT
+    )
+    """)
     conn.commit()
     cur.execute("SELECT id FROM users WHERE username = ?", ("admin",))
     if not cur.fetchone():
+        admin_password = os.environ.get("ADMIN_PASSWORD", "admin123")
         cur.execute(
             """INSERT INTO users (username, password_hash, role, membership_plan, membership_expires_at, created_at)
                VALUES (?, ?, 'admin', 'year', ?, ?)""",
-            ("admin", generate_password_hash("admin123", method="pbkdf2:sha256"), (now() + timedelta(days=3650)).isoformat(), now().isoformat())
+            ("admin", generate_password_hash(admin_password, method="pbkdf2:sha256"), (now() + timedelta(days=3650)).isoformat(), now().isoformat())
         )
         conn.commit()
     conn.close()
-
 
 def allowed_file(filename):
     return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_UPLOAD_EXTENSIONS
@@ -78,10 +94,13 @@ def save_uploaded_signals(file_storage):
         parsed = json.loads(raw.decode("utf-8"))
     except Exception as e:
         raise ValueError(f"JSON 解析失败: {e}")
+
     if isinstance(parsed, dict) and "signals" in parsed:
         parsed = parsed["signals"]
+
     if not isinstance(parsed, list):
         raise ValueError("JSON 顶层必须是列表，或包含 signals 字段")
+
     required_keys = {"rank", "code", "name", "score", "reason"}
     for idx, item in enumerate(parsed[:3]):
         if not isinstance(item, dict):
@@ -89,6 +108,7 @@ def save_uploaded_signals(file_storage):
         missing = required_keys - set(item.keys())
         if missing:
             raise ValueError(f"第 {idx+1} 条缺少字段: {', '.join(sorted(missing))}")
+
     with open(DATA_PATH, "w", encoding="utf-8") as f:
         json.dump(parsed, f, ensure_ascii=False, indent=2)
     return len(parsed)
@@ -133,6 +153,17 @@ def is_paid(user):
     except Exception:
         return False
 
+def make_order_no():
+    return "ASR" + datetime.utcnow().strftime("%Y%m%d%H%M%S") + uuid.uuid4().hex[:6].upper()
+
+def get_user_orders(username):
+    conn = get_conn()
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM orders WHERE username = ? ORDER BY id DESC", (username,))
+    rows = cur.fetchall()
+    conn.close()
+    return rows
+
 def login_required(fn):
     from functools import wraps
     @wraps(fn)
@@ -147,8 +178,6 @@ def admin_required(fn):
     from functools import wraps
     @wraps(fn)
     def wrapper(*args, **kwargs):
-        if "user" not in session:
-            return redirect(url_for("admin_login"))
         user = current_user()
         if not user or user["role"] != "admin":
             flash("请先使用管理员账号登录后台")
@@ -162,6 +191,10 @@ def index():
     user = current_user()
     return render_template("index.html", user=user, plans=PLANS)
 
+@app.route("/disclaimer")
+def disclaimer():
+    return render_template("disclaimer.html")
+
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "POST":
@@ -169,6 +202,9 @@ def register():
         password = request.form.get("password", "").strip()
         if len(username) < 3 or len(password) < 6:
             flash("用户名至少3位，密码至少6位")
+            return render_template("register.html")
+        if request.form.get("agree_disclaimer") != "yes":
+            flash("请先阅读并同意免责声明")
             return render_template("register.html")
         conn = get_conn()
         cur = conn.cursor()
@@ -201,7 +237,6 @@ def login():
         next_url = request.args.get("next") or url_for("dashboard")
         return redirect(next_url)
     return render_template("login.html")
-
 
 @app.route("/admin-login", methods=["GET", "POST"])
 def admin_login():
@@ -239,90 +274,118 @@ def pricing():
 @login_required
 def pay(plan_code):
     user = current_user()
-    if not user:
-        flash("登录状态已失效，请重新登录后再提交支付申请")
-        return redirect(url_for("login"))
     if plan_code not in PLANS:
         flash("套餐不存在")
         return redirect(url_for("pricing"))
     plan = PLANS[plan_code]
+
     if request.method == "POST":
         payer_name = request.form.get("payer_name", "").strip()
         payer_note = request.form.get("payer_note", "").strip()
+        payment_method = request.form.get("payment_method", "manual_qr").strip() or "manual_qr"
+        order_no = make_order_no()
+
         conn = get_conn()
         cur = conn.cursor()
         cur.execute(
-            """INSERT INTO payment_requests (username, plan_code, payer_name, payer_note, status, created_at)
-               VALUES (?, ?, ?, ?, 'pending', ?)""",
-            (user["username"], plan_code, payer_name, payer_note, now().isoformat())
+            """INSERT INTO orders
+               (order_no, username, plan_code, plan_name, amount, payment_method, payer_name, payer_note, status, created_at)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'pending', ?)""",
+            (order_no, user["username"], plan_code, plan["name"], plan["amount"], payment_method, payer_name, payer_note, now().isoformat())
         )
         conn.commit()
         conn.close()
-        flash("已提交开通申请，请你核对到账后在后台开通")
-        return redirect(url_for("dashboard"))
+
+        flash(f"订单已提交：{order_no}。请等待管理员核对到账后开通。")
+        return redirect(url_for("orders"))
+
     return render_template("pay.html", user=user, plan=plan, plan_code=plan_code)
+
+@app.route("/orders")
+@login_required
+def orders():
+    user = current_user()
+    rows = get_user_orders(user["username"])
+    return render_template("orders.html", user=user, orders=rows, plans=PLANS)
 
 @app.route("/admin")
 @admin_required
 def admin():
     conn = get_conn()
     cur = conn.cursor()
-    cur.execute("SELECT * FROM payment_requests ORDER BY id DESC")
-    payments = cur.fetchall()
+    cur.execute("SELECT * FROM orders ORDER BY id DESC")
+    orders = cur.fetchall()
     cur.execute("SELECT username, role, membership_plan, membership_expires_at, created_at FROM users ORDER BY id DESC")
     users = cur.fetchall()
     conn.close()
     user = current_user()
     signals = load_signals()
-    return render_template("admin.html", payments=payments, users=users, plans=PLANS, user=user, signal_count=len(signals))
+    return render_template("admin.html", orders=orders, users=users, plans=PLANS, user=user, signal_count=len(signals))
 
-@app.route("/admin/approve/<int:payment_id>/<plan_code>", methods=["POST"])
+@app.route("/admin/approve-order/<int:order_id>", methods=["POST"])
 @admin_required
-def approve(payment_id, plan_code):
-    if plan_code not in PLANS:
-        flash("套餐不存在")
-        return redirect(url_for("admin"))
+def approve_order(order_id):
     conn = get_conn()
     cur = conn.cursor()
-    cur.execute("SELECT * FROM payment_requests WHERE id = ?", (payment_id,))
-    payment = cur.fetchone()
-    if not payment:
+    cur.execute("SELECT * FROM orders WHERE id = ?", (order_id,))
+    order = cur.fetchone()
+    if not order:
         conn.close()
-        flash("记录不存在")
+        flash("订单不存在")
         return redirect(url_for("admin"))
-    username = payment["username"]
-    user = get_user(username)
+    if order["status"] == "approved":
+        conn.close()
+        flash("该订单已开通，无需重复操作")
+        return redirect(url_for("admin"))
+
+    plan_code = order["plan_code"]
+    if plan_code not in PLANS:
+        conn.close()
+        flash("套餐不存在")
+        return redirect(url_for("admin"))
+
+    username = order["username"]
+    cur.execute("SELECT * FROM users WHERE username = ?", (username,))
+    target_user = cur.fetchone()
+    if not target_user:
+        conn.close()
+        flash("用户不存在，无法开通")
+        return redirect(url_for("admin"))
+
     days = PLANS[plan_code]["days"]
     base_time = now()
-    if user["membership_expires_at"]:
+    if target_user["membership_expires_at"]:
         try:
-            existing = datetime.fromisoformat(user["membership_expires_at"])
+            existing = datetime.fromisoformat(target_user["membership_expires_at"])
             if existing > base_time:
                 base_time = existing
         except Exception:
             pass
+
     new_expiry = base_time + timedelta(days=days)
     cur.execute(
         "UPDATE users SET membership_plan = ?, membership_expires_at = ? WHERE username = ?",
         (plan_code, new_expiry.isoformat(), username)
     )
-    cur.execute("UPDATE payment_requests SET status = 'approved' WHERE id = ?", (payment_id,))
+    cur.execute(
+        "UPDATE orders SET status = 'approved', approved_at = ? WHERE id = ?",
+        (now().isoformat(), order_id)
+    )
     conn.commit()
     conn.close()
-    flash(f"{username} 已开通 {PLANS[plan_code]['name']}")
+    flash(f"订单 {order['order_no']} 已开通：{username} / {PLANS[plan_code]['name']}")
     return redirect(url_for("admin"))
 
-@app.route("/admin/reject/<int:payment_id>", methods=["POST"])
+@app.route("/admin/reject-order/<int:order_id>", methods=["POST"])
 @admin_required
-def reject(payment_id):
+def reject_order(order_id):
     conn = get_conn()
     cur = conn.cursor()
-    cur.execute("UPDATE payment_requests SET status = 'rejected' WHERE id = ?", (payment_id,))
+    cur.execute("UPDATE orders SET status = 'rejected', rejected_at = ? WHERE id = ? AND status = 'pending'", (now().isoformat(), order_id))
     conn.commit()
     conn.close()
-    flash("已拒绝该申请")
+    flash("已拒绝该订单")
     return redirect(url_for("admin"))
-
 
 @app.route("/admin/upload-signals", methods=["POST"])
 @admin_required
@@ -342,8 +405,10 @@ def health():
         cur = conn.cursor()
         cur.execute("SELECT COUNT(*) AS n FROM users")
         n = cur.fetchone()["n"]
+        cur.execute("SELECT COUNT(*) AS n FROM orders")
+        o = cur.fetchone()["n"]
         conn.close()
-        return {"status": "ok", "users": n}
+        return {"status": "ok", "users": n, "orders": o}
     except Exception as e:
         return {"status": "error", "message": str(e)}, 500
 
@@ -355,8 +420,6 @@ def api_signals():
     visible = signals if is_paid(user) else signals[:3]
     return jsonify(visible)
 
-# Railway / Render 使用 gunicorn app:app 启动时，不会执行 init_db.py。
-# 所以这里在模块加载时自动初始化数据库，避免线上注册时报 users 表不存在。
 init_db()
 
 if __name__ == "__main__":
