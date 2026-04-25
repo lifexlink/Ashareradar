@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", function () {
     form.addEventListener("submit", function () {
       const path = window.location.pathname || "";
 
-      // 只在支付页防重复提交，不影响登录/注册速度体验
+      // 只在支付页启用防重复提交，不影响登录、注册、后台按钮
       if (!path.includes("/pay/")) {
         return;
       }

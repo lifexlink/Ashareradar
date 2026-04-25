@@ -171,14 +171,17 @@ def load_signal_meta():
 
 
 def source_label(source):
+    source = source or ""
     mapping = {
         "live-stock_zh_a_spot_em": "实时行情｜东方财富A股行情",
         "live-stock_zh_a_spot": "实时行情｜新浪A股行情",
         "live-stock_zh_a_spot_tx": "实时行情｜腾讯A股行情",
         "fallback-demo": "备用演示数据",
         "uploaded-list": "后台上传数据",
+        "dict": "系统数据",
+        "unknown": "未知来源",
     }
-    return mapping.get(source or "", source or "未知来源")
+    return mapping.get(source, source.replace("live-", "实时行情｜"))
 
 def is_cn_trading_time():
     dt = now() + timedelta(hours=8)
@@ -190,6 +193,11 @@ def is_cn_trading_time():
 def display_value(value, suffix=""):
     if value in (None, "", "-", "0", 0, 0.0, "0.0", "0.00"):
         return "-"
+    try:
+        if float(value) == 0:
+            return "-"
+    except Exception:
+        pass
     return f"{value}{suffix}"
 
 def generate_invite_code(username):

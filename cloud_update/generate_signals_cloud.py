@@ -153,7 +153,7 @@ def live_records():
             reason_parts.append(f"涨速 {speed}%")
 
         reason = "；".join(reason_parts)
-        reason += f"。综合动量、成交额、换手率、涨速和活跃度排序，数据源：{used_source}。"
+        reason += f"。综合动量、成交额、换手率、涨速和活跃度排序，数据源：东方财富A股行情。"
 
         records.append({
             "rank": i + 1,

@@ -1,8 +1,79 @@
 {% extends "layout.html" %}{% block body %}
-<div class="notice" style="margin-bottom:18px;">⚠ 本榜单仅为公开市场数据筛选结果，不构成投资建议、买卖建议或收益承诺。请独立判断并控制仓位。</div>
-{% if not trading_time %}<div class="notice" style="margin-bottom:18px;">当前可能为非交易时段或周末，部分行情字段可能来自最近交易日快照；换手率等字段如未提供将显示为 “-”。</div>{% endif %}
-<section class="grid three" style="margin-bottom:18px;"><div class="card"><div class="kpi">当前账号</div><h3>{{ user.username }}</h3><p class="muted">套餐：{{ user.membership_plan }}<br>到期：{{ user.membership_expires_at or '未开通' }}</p></div><div class="card"><div class="kpi">数据状态</div><h3>{% if meta.source and meta.source.startswith('live') %}实时数据{% else %}备用/上传数据{% endif %}</h3><p class="muted">来源：{{ source_label }}<br>更新时间：{{ meta.generated_at or '未记录' }}</p></div><div class="card"><div class="kpi">当前权限</div><h3>{% if paid %}完整 Top10{% else %}免费 Top3{% endif %}</h3><p class="muted">当前显示：{{ signals|length }} / {{ all_count }} 只</p>{% if not paid %}<a class="btn primary" href="{{ url_for('pricing') }}">升级解锁完整Top10</a>{% endif %}</div></section>
-<h2>今日强势候选池</h2><p class="muted">基于实时行情、涨跌幅、成交额、换手率和活跃度自动筛选。</p>
-<div class="card"><table><thead><tr><th>排名</th><th>代码</th><th>名称</th><th>评分</th><th>最新价</th><th>涨跌幅</th><th>成交额</th><th>换手率</th><th>标签</th><th>筛选理由</th></tr></thead><tbody>{% for item in signals %}<tr><td><strong>#{{ item.rank }}</strong></td><td>{{ item.code }}</td><td><strong>{{ item.name }}</strong></td><td><span class="score-badge">{{ item.score }}</span></td><td>{{ display_value(item.price if item.price is defined else '-') }}</td><td>{{ display_value(item.change_pct if item.change_pct is defined else '-', '%') }}</td><td>{{ display_value(item.amount if item.amount is defined else '-') }}</td><td>{{ display_value(item.turnover if item.turnover is defined else '-', '%') }}</td><td>{% if item.signal_tags is defined %}{% for tag in item.signal_tags %}<span class="tag">{{ tag }}</span>{% endfor %}{% else %}<span class="tag">强势候选</span>{% endif %}</td><td>{{ item.reason }}</td></tr>{% endfor %}</tbody></table></div>
-{% if not paid %}<div class="notice">你当前是免费账号，仅能查看前 3 只。开通周卡 ¥39 后，可查看完整 Top10 候选池。</div>{% endif %}
+
+<div class="notice" style="margin-bottom:18px;">
+  ⚠ 本榜单仅为公开市场数据筛选结果，不构成投资建议、买卖建议或收益承诺。请独立判断并控制仓位。
+</div>
+
+{% if trading_time is defined and not trading_time %}
+<div class="notice" style="margin-bottom:18px;">
+  当前可能为非交易时段或周末，部分行情字段可能来自最近交易日快照；换手率等字段如未提供将显示为 “-”。
+</div>
+{% endif %}
+
+<section class="grid three" style="margin-bottom:18px;">
+  <div class="card">
+    <div class="kpi">当前账号</div>
+    <h3>{{ user.username }}</h3>
+    <p class="muted">套餐：{{ user.membership_plan }}<br>到期：{{ user.membership_expires_at or '未开通' }}</p>
+  </div>
+
+  <div class="card">
+    <div class="kpi">数据状态</div>
+    <h3>{% if meta.source and meta.source.startswith('live') %}实时数据{% else %}备用/上传数据{% endif %}</h3>
+    <p class="muted">
+      来源：{{ source_label if source_label is defined else meta.source }}<br>
+      更新时间：{{ meta.generated_at or '未记录' }}
+    </p>
+  </div>
+
+  <div class="card">
+    <div class="kpi">当前权限</div>
+    <h3>{% if paid %}完整 Top10{% else %}免费 Top3{% endif %}</h3>
+    <p class="muted">当前显示：{{ signals|length }} / {{ all_count }} 只</p>
+    {% if not paid %}
+    <a class="btn primary" href="{{ url_for('pricing') }}">升级解锁完整Top10</a>
+    {% endif %}
+  </div>
+</section>
+
+<h2>今日强势候选池</h2>
+<p class="muted">基于实时行情、涨跌幅、成交额、换手率和活跃度自动筛选。</p>
+
+<div class="card">
+  <table>
+    <thead>
+      <tr>
+        <th>排名</th><th>代码</th><th>名称</th><th>评分</th><th>最新价</th>
+        <th>涨跌幅</th><th>成交额</th><th>换手率</th><th>标签</th><th>筛选理由</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in signals %}
+      <tr>
+        <td><strong>#{{ item.rank }}</strong></td>
+        <td>{{ item.code }}</td>
+        <td><strong>{{ item.name }}</strong></td>
+        <td><span class="score-badge">{{ item.score }}</span></td>
+        <td>{{ display_value(item.price if item.price is defined else '-') if display_value is defined else (item.price if item.price is defined else '-') }}</td>
+        <td>{{ display_value(item.change_pct if item.change_pct is defined else '-', '%') if display_value is defined else (item.change_pct if item.change_pct is defined else '-') }}</td>
+        <td>{{ display_value(item.amount if item.amount is defined else '-') if display_value is defined else (item.amount if item.amount is defined else '-') }}</td>
+        <td>{{ display_value(item.turnover if item.turnover is defined else '-', '%') if display_value is defined else (item.turnover if item.turnover is defined else '-') }}</td>
+        <td>
+          {% if item.signal_tags is defined %}
+            {% for tag in item.signal_tags %}<span class="tag">{{ tag }}</span>{% endfor %}
+          {% else %}
+            <span class="tag">强势候选</span>
+          {% endif %}
+        </td>
+        <td>{{ item.reason }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% if not paid %}
+<div class="notice">你当前是免费账号，仅能查看前 3 只。开通周卡 ¥39 后，可查看完整 Top10 候选池。</div>
+{% endif %}
+
 {% endblock %}
