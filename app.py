@@ -12,6 +12,19 @@ ALLOWED_UPLOAD_EXTENSIONS = {"json"}
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "change-me-in-production")
 
+@app.template_filter("dash_zero")
+def dash_zero(value, suffix=""):
+    """Display missing/zero market fields as '-' to avoid misleading 0.00%."""
+    if value in (None, "", "-", "0", 0, 0.0, "0.0", "0.00"):
+        return "-"
+    try:
+        if float(value) == 0:
+            return "-"
+    except Exception:
+        pass
+    return f"{value}{suffix}"
+
+
 PLANS = {
     "week": {"name": "周卡", "days": 7, "price": "¥39", "amount": 39},
     "month": {"name": "月卡", "days": 30, "price": "¥129", "amount": 129},
@@ -877,7 +890,7 @@ def health():
             except Exception:
                 source = "unreadable"
         history_files = len([f for f in os.listdir(HISTORY_DIR) if f.endswith(".json")]) if os.path.exists(HISTORY_DIR) else 0
-        return {"status": "ok", "version": "v7.1-patch", "users": n, "orders": o, "signals": len(signals), "source": source, "source_label": source_label(source), "generated_at": generated_at, "history_files": history_files}
+        return {"status": "ok", "version": "v7.2-final-patch", "users": n, "orders": o, "signals": len(signals), "source": source, "source_label": source_label(source), "generated_at": generated_at, "history_files": history_files}
     except Exception as e:
         return {"status": "error", "message": str(e)}, 500
 

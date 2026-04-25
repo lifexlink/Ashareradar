@@ -54,10 +54,10 @@
         <td>{{ item.code }}</td>
         <td><strong>{{ item.name }}</strong></td>
         <td><span class="score-badge">{{ item.score }}</span></td>
-        <td>{{ display_value(item.price if item.price is defined else '-') if display_value is defined else (item.price if item.price is defined else '-') }}</td>
-        <td>{{ display_value(item.change_pct if item.change_pct is defined else '-', '%') if display_value is defined else (item.change_pct if item.change_pct is defined else '-') }}</td>
-        <td>{{ display_value(item.amount if item.amount is defined else '-') if display_value is defined else (item.amount if item.amount is defined else '-') }}</td>
-        <td>{{ display_value(item.turnover if item.turnover is defined else '-', '%') if display_value is defined else (item.turnover if item.turnover is defined else '-') }}</td>
+        <td>{{ item.price|dash_zero }}</td>
+        <td>{{ item.change_pct|dash_zero('%') }}</td>
+        <td>{{ item.amount|dash_zero }}</td>
+        <td>{{ item.turnover|dash_zero('%') }}</td>
         <td>
           {% if item.signal_tags is defined %}
             {% for tag in item.signal_tags %}<span class="tag">{{ tag }}</span>{% endfor %}
