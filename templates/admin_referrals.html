@@ -1,0 +1,3 @@
+{% extends "layout.html" %}{% block body %}
+<h2>邀请管理</h2><p><a class="btn" href="{{ url_for('admin') }}">返回后台</a></p><div class="card"><table><thead><tr><th>ID</th><th>邀请人</th><th>被邀请人</th><th>奖励天数</th><th>状态</th><th>时间</th><th>操作</th></tr></thead><tbody>{% for r in referrals %}<tr><td>{{ r.id }}</td><td>{{ r.referrer_username }}</td><td>{{ r.referred_username }}</td><td>{{ r.reward_days }}</td><td>{{ r.status }}</td><td>{{ r.created_at }}</td><td>{% if r.status == 'pending' %}<form method="post" action="{{ url_for('approve_referral', referral_id=r.id) }}"><button class="btn small primary">奖励+{{ r.reward_days }}天</button></form>{% else %}已处理{% endif %}</td></tr>{% else %}<tr><td colspan="7">暂无邀请记录</td></tr>{% endfor %}</tbody></table></div>
+{% endblock %}

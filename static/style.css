@@ -12,3 +12,5 @@ td{vertical-align:top}
 
 textarea{width:100%;padding:12px;border-radius:12px;border:1px solid var(--line);background:#0d1429;color:#fff;resize:vertical}
 .quote{border-left:3px solid rgba(56,189,248,.65);padding:10px 0 10px 14px;margin:10px 0;color:#e6eefc}
+
+input[readonly]{background:#0d1429;color:#fff;border:1px solid var(--line);border-radius:12px;padding:12px;width:100%}

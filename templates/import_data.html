@@ -1,0 +1,3 @@
+{% extends "layout.html" %}{% block body %}
+<div class="auth-card"><h2>导入用户/订单数据</h2><div class="notice">请只导入从本系统后台“导出数据”得到的 JSON。导入前建议先再导出一次当前数据作为备份。</div><form method="post" enctype="multipart/form-data" class="form"><label>选择备份 JSON 文件<input type="file" name="backup_file" accept=".json" required></label><button class="btn primary" type="submit">导入数据</button></form></div>
+{% endblock %}

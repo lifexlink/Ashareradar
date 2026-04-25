@@ -1,6 +1,6 @@
-from flask import Flask, render_template, request, redirect, session, url_for, flash, jsonify
+from flask import Flask, render_template, request, redirect, session, url_for, flash, jsonify, make_response
 from werkzeug.security import generate_password_hash, check_password_hash
-import sqlite3, json, os, uuid
+import sqlite3, json, os, uuid, hashlib
 from datetime import datetime, timedelta
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -79,6 +79,25 @@ def init_db():
         reviewed_at TEXT
     )
     """)
+    for sql in [
+        "ALTER TABLE users ADD COLUMN invite_code TEXT",
+        "ALTER TABLE users ADD COLUMN referred_by TEXT"
+    ]:
+        try:
+            cur.execute(sql)
+        except sqlite3.OperationalError:
+            pass
+    cur.execute("""
+    CREATE TABLE IF NOT EXISTS referrals (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        referrer_username TEXT NOT NULL,
+        referred_username TEXT NOT NULL,
+        reward_days INTEGER NOT NULL DEFAULT 3,
+        status TEXT NOT NULL DEFAULT 'pending',
+        created_at TEXT NOT NULL,
+        approved_at TEXT
+    )
+    """)
     conn.commit()
     cur.execute("SELECT id FROM users WHERE username = ?", ("admin",))
     if not cur.fetchone():
@@ -149,6 +168,51 @@ def load_signal_meta():
             meta["source"] = "unreadable"
     return meta
 
+
+
+def source_label(source):
+    mapping = {
+        "live-stock_zh_a_spot_em": "实时行情｜东方财富A股行情",
+        "live-stock_zh_a_spot": "实时行情｜新浪A股行情",
+        "live-stock_zh_a_spot_tx": "实时行情｜腾讯A股行情",
+        "fallback-demo": "备用演示数据",
+        "uploaded-list": "后台上传数据",
+    }
+    return mapping.get(source or "", source or "未知来源")
+
+def is_cn_trading_time():
+    dt = now() + timedelta(hours=8)
+    if dt.weekday() >= 5:
+        return False
+    minutes = dt.hour * 60 + dt.minute
+    return (9*60+30 <= minutes <= 11*60+30) or (13*60 <= minutes <= 15*60)
+
+def display_value(value, suffix=""):
+    if value in (None, "", "-", "0", 0, 0.0, "0.0", "0.00"):
+        return "-"
+    return f"{value}{suffix}"
+
+def generate_invite_code(username):
+    raw = f"{username}-{datetime.utcnow().isoformat()}".encode("utf-8")
+    return hashlib.sha1(raw).hexdigest()[:8].upper()
+
+def ensure_invite_code(username):
+    user = get_user(username)
+    if not user:
+        return None
+    try:
+        code = user["invite_code"]
+    except Exception:
+        code = None
+    if code:
+        return code
+    code = generate_invite_code(username)
+    conn = get_conn()
+    cur = conn.cursor()
+    cur.execute("UPDATE users SET invite_code = ? WHERE username = ?", (code, username))
+    conn.commit()
+    conn.close()
+    return code
 
 def load_history_records(limit=30):
     records = []
@@ -307,6 +371,7 @@ def register():
     if request.method == "POST":
         username = request.form.get("username", "").strip()
         password = request.form.get("password", "").strip()
+        invite_code = request.form.get("invite_code", request.args.get("ref", "")).strip().upper()
         if len(username) < 3 or len(password) < 6:
             flash("用户名至少3位，密码至少6位")
             return render_template("register.html")
@@ -316,11 +381,23 @@ def register():
         conn = get_conn()
         cur = conn.cursor()
         try:
+            referred_by = None
+            if invite_code:
+                cur.execute("SELECT username FROM users WHERE invite_code = ?", (invite_code,))
+                ref = cur.fetchone()
+                if ref:
+                    referred_by = ref["username"]
+            new_code = generate_invite_code(username)
             cur.execute(
-                """INSERT INTO users (username, password_hash, role, membership_plan, membership_expires_at, created_at)
-                   VALUES (?, ?, 'user', 'free', NULL, ?)""",
-                (username, generate_password_hash(password, method="pbkdf2:sha256"), now().isoformat())
+                """INSERT INTO users (username, password_hash, role, membership_plan, membership_expires_at, created_at, invite_code, referred_by)
+                   VALUES (?, ?, 'user', 'free', NULL, ?, ?, ?)""",
+                (username, generate_password_hash(password, method="pbkdf2:sha256"), now().isoformat(), new_code, referred_by)
             )
+            if referred_by:
+                cur.execute(
+                    "INSERT INTO referrals (referrer_username, referred_username, reward_days, status, created_at) VALUES (?, ?, 3, 'pending', ?)",
+                    (referred_by, username, now().isoformat())
+                )
             conn.commit()
         except sqlite3.IntegrityError:
             flash("用户名已存在")
@@ -371,7 +448,7 @@ def dashboard():
     paid = is_paid(user)
     visible = signals if paid else signals[:3]
     meta = load_signal_meta()
-    return render_template("dashboard.html", user=user, signals=visible, all_count=len(signals), paid=paid, meta=meta)
+    return render_template("dashboard.html", user=user, signals=visible, all_count=len(signals), paid=paid, meta=meta, source_label=source_label(meta.get("source")), trading_time=is_cn_trading_time(), display_value=display_value)
 
 @app.route("/pricing")
 def pricing():
@@ -484,7 +561,7 @@ def backtest():
         "last7_up_count": sum([r.get("up_count", 0) for r in last7]),
         "last7_total": sum([r.get("total", 0) for r in last7]),
     }
-    return render_template("backtest.html", summaries=summaries, stats=stats)
+    return render_template("backtest.html", summaries=summaries, stats=stats, source_label=source_label)
 
 @app.route("/review")
 def review():
@@ -493,7 +570,7 @@ def review():
     previous = history[1] if len(history) > 1 else None
     latest_summary = summarize_snapshot(latest) if latest else None
     previous_summary = summarize_snapshot(previous) if previous else None
-    return render_template("review.html", latest=latest, previous=previous, latest_summary=latest_summary, previous_summary=previous_summary)
+    return render_template("review.html", latest=latest, previous=previous, latest_summary=latest_summary, previous_summary=previous_summary, source_label=source_label, display_value=display_value)
 
 @app.route("/methodology")
 def methodology():
@@ -549,6 +626,133 @@ def admin_feedback_action(feedback_id, action):
     conn.close()
     flash("反馈状态已更新")
     return redirect(url_for("admin_feedback"))
+
+
+@app.route("/affiliate")
+@login_required
+def affiliate():
+    user = current_user()
+    code = ensure_invite_code(user["username"])
+    conn = get_conn()
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM referrals WHERE referrer_username = ? ORDER BY id DESC", (user["username"],))
+    referrals = cur.fetchall()
+    conn.close()
+    invite_url = url_for("register", ref=code, _external=True)
+    return render_template("affiliate.html", user=user, invite_code=code, invite_url=invite_url, referrals=referrals)
+
+@app.route("/admin/export")
+@admin_required
+def export_data():
+    conn = get_conn()
+    cur = conn.cursor()
+    export = {"exported_at": now().isoformat(), "version": "v7"}
+    for table in ["users", "orders", "feedback", "referrals"]:
+        try:
+            cur.execute(f"SELECT * FROM {table}")
+            export[table] = [dict(row) for row in cur.fetchall()]
+        except Exception:
+            export[table] = []
+    conn.close()
+    response = make_response(json.dumps(export, ensure_ascii=False, indent=2))
+    response.headers["Content-Type"] = "application/json; charset=utf-8"
+    response.headers["Content-Disposition"] = "attachment; filename=ashare_v7_backup.json"
+    return response
+
+@app.route("/admin/import", methods=["GET", "POST"])
+@admin_required
+def import_data():
+    user = current_user()
+    if request.method == "POST":
+        file = request.files.get("backup_file")
+        if not file or not file.filename:
+            flash("请选择备份文件")
+            return render_template("import_data.html", user=user)
+        try:
+            payload = json.loads(file.read().decode("utf-8"))
+            conn = get_conn()
+            cur = conn.cursor()
+            for row in payload.get("users", []):
+                cur.execute(
+                    """INSERT OR REPLACE INTO users
+                       (id, username, password_hash, role, membership_plan, membership_expires_at, created_at, invite_code, referred_by)
+                       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+                    (row.get("id"), row.get("username"), row.get("password_hash"), row.get("role", "user"), row.get("membership_plan", "free"), row.get("membership_expires_at"), row.get("created_at", now().isoformat()), row.get("invite_code"), row.get("referred_by"))
+                )
+            for row in payload.get("orders", []):
+                cur.execute(
+                    """INSERT OR REPLACE INTO orders
+                       (id, order_no, username, plan_code, plan_name, amount, payment_method, payer_name, payer_note, status, created_at, approved_at, rejected_at)
+                       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+                    (row.get("id"), row.get("order_no"), row.get("username"), row.get("plan_code"), row.get("plan_name"), row.get("amount"), row.get("payment_method"), row.get("payer_name"), row.get("payer_note"), row.get("status"), row.get("created_at"), row.get("approved_at"), row.get("rejected_at"))
+                )
+            for row in payload.get("feedback", []):
+                cur.execute(
+                    """INSERT OR REPLACE INTO feedback (id, username, nickname, content, status, created_at, reviewed_at)
+                       VALUES (?, ?, ?, ?, ?, ?, ?)""",
+                    (row.get("id"), row.get("username"), row.get("nickname"), row.get("content"), row.get("status"), row.get("created_at"), row.get("reviewed_at"))
+                )
+            for row in payload.get("referrals", []):
+                cur.execute(
+                    """INSERT OR REPLACE INTO referrals (id, referrer_username, referred_username, reward_days, status, created_at, approved_at)
+                       VALUES (?, ?, ?, ?, ?, ?, ?)""",
+                    (row.get("id"), row.get("referrer_username"), row.get("referred_username"), row.get("reward_days", 3), row.get("status", "pending"), row.get("created_at"), row.get("approved_at"))
+                )
+            conn.commit()
+            conn.close()
+            flash("数据导入完成")
+            return redirect(url_for("admin"))
+        except Exception as e:
+            flash(f"导入失败：{e}")
+    return render_template("import_data.html", user=user)
+
+@app.route("/admin/referrals")
+@admin_required
+def admin_referrals():
+    conn = get_conn()
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM referrals ORDER BY id DESC")
+    referrals = cur.fetchall()
+    conn.close()
+    user = current_user()
+    return render_template("admin_referrals.html", user=user, referrals=referrals)
+
+@app.route("/admin/referrals/<int:referral_id>/approve", methods=["POST"])
+@admin_required
+def approve_referral(referral_id):
+    conn = get_conn()
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM referrals WHERE id = ?", (referral_id,))
+    ref = cur.fetchone()
+    if not ref:
+        conn.close()
+        flash("邀请记录不存在")
+        return redirect(url_for("admin_referrals"))
+    if ref["status"] == "approved":
+        conn.close()
+        flash("该邀请已奖励")
+        return redirect(url_for("admin_referrals"))
+    username = ref["referrer_username"]
+    days = int(ref["reward_days"] or 3)
+    cur.execute("SELECT * FROM users WHERE username = ?", (username,))
+    u = cur.fetchone()
+    if u:
+        base_time = now()
+        if u["membership_expires_at"]:
+            try:
+                existing = datetime.fromisoformat(u["membership_expires_at"])
+                if existing > base_time:
+                    base_time = existing
+            except Exception:
+                pass
+        new_expiry = base_time + timedelta(days=days)
+        plan = u["membership_plan"] if u["membership_plan"] != "free" else "week"
+        cur.execute("UPDATE users SET membership_plan = ?, membership_expires_at = ? WHERE username = ?", (plan, new_expiry.isoformat(), username))
+        cur.execute("UPDATE referrals SET status='approved', approved_at=? WHERE id=?", (now().isoformat(), referral_id))
+        conn.commit()
+        flash(f"已为 {username} 增加 {days} 天会员")
+    conn.close()
+    return redirect(url_for("admin_referrals"))
 
 @app.route("/admin")
 @admin_required
@@ -665,7 +869,7 @@ def health():
             except Exception:
                 source = "unreadable"
         history_files = len([f for f in os.listdir(HISTORY_DIR) if f.endswith(".json")]) if os.path.exists(HISTORY_DIR) else 0
-        return {"status": "ok", "users": n, "orders": o, "signals": len(signals), "source": source, "generated_at": generated_at, "history_files": history_files}
+        return {"status": "ok", "version": "v7-final", "users": n, "orders": o, "signals": len(signals), "source": source, "source_label": source_label(source), "generated_at": generated_at, "history_files": history_files}
     except Exception as e:
         return {"status": "error", "message": str(e)}, 500
 
