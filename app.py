@@ -122,6 +122,21 @@ def load_signals():
             return payload if isinstance(payload, list) else []
     return []
 
+def load_signal_meta():
+    meta = {"source": "unknown", "generated_at": None}
+    if os.path.exists(DATA_PATH):
+        try:
+            with open(DATA_PATH, "r", encoding="utf-8") as f:
+                payload = json.load(f)
+                if isinstance(payload, dict):
+                    meta["source"] = payload.get("source", "dict")
+                    meta["generated_at"] = payload.get("generated_at")
+                elif isinstance(payload, list):
+                    meta["source"] = "uploaded-list"
+        except Exception:
+            meta["source"] = "unreadable"
+    return meta
+
 def get_user(username):
     conn = get_conn()
     cur = conn.cursor()
@@ -263,7 +278,8 @@ def dashboard():
     signals = load_signals()
     paid = is_paid(user)
     visible = signals if paid else signals[:3]
-    return render_template("dashboard.html", user=user, signals=visible, all_count=len(signals), paid=paid)
+    meta = load_signal_meta()
+    return render_template("dashboard.html", user=user, signals=visible, all_count=len(signals), paid=paid, meta=meta)
 
 @app.route("/pricing")
 def pricing():

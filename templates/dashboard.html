@@ -5,32 +5,57 @@
   请独立判断并控制仓位。
 </div>
 
+<section class="grid three" style="margin-bottom:18px;">
+  <div class="card">
+    <div class="kpi">当前账号</div>
+    <h3>{{ user.username }}</h3>
+    <p class="muted">套餐：{{ user.membership_plan }}<br>到期：{{ user.membership_expires_at or '未开通' }}</p>
+  </div>
+
+  <div class="card">
+    <div class="kpi">数据状态</div>
+    <h3>{% if meta.source and meta.source.startswith('live') %}实时数据{% else %}备用/上传数据{% endif %}</h3>
+    <p class="muted">
+      来源：{{ meta.source or 'unknown' }}<br>
+      更新时间：{{ meta.generated_at or '未记录' }}
+    </p>
+  </div>
+
+  <div class="card">
+    <div class="kpi">当前权限</div>
+    <h3>{% if paid %}完整 Top10{% else %}免费 Top3{% endif %}</h3>
+    <p class="muted">当前显示：{{ signals|length }} / {{ all_count }} 只</p>
+    {% if not paid %}
+    <a class="btn primary" href="{{ url_for('pricing') }}">升级解锁完整Top10</a>
+    {% endif %}
+  </div>
+</section>
+
 <div class="section-head">
   <div>
     <h2>今日强势候选池</h2>
-    <p class="muted">
-      当前账号：{{ user.username }} |
-      套餐：{{ user.membership_plan }} |
-      到期：{{ user.membership_expires_at or '未开通' }}
-    </p>
+    <p class="muted">基于实时行情、涨跌幅和成交活跃度进行自动筛选。</p>
   </div>
-  {% if not paid %}
-  <a class="btn primary" href="{{ url_for('pricing') }}">升级解锁完整Top10</a>
-  {% endif %}
 </div>
 
 <div class="card">
   <table>
     <thead>
-      <tr><th>排名</th><th>代码</th><th>名称</th><th>评分</th><th>筛选理由</th></tr>
+      <tr>
+        <th>排名</th>
+        <th>代码</th>
+        <th>名称</th>
+        <th>评分</th>
+        <th>筛选理由</th>
+      </tr>
     </thead>
     <tbody>
       {% for item in signals %}
       <tr>
-        <td>{{ item.rank }}</td>
+        <td><strong>#{{ item.rank }}</strong></td>
         <td>{{ item.code }}</td>
-        <td>{{ item.name }}</td>
-        <td>{{ item.score }}</td>
+        <td><strong>{{ item.name }}</strong></td>
+        <td><span class="score-badge">{{ item.score }}</span></td>
         <td>{{ item.reason }}</td>
       </tr>
       {% endfor %}
@@ -40,9 +65,27 @@
 
 {% if not paid %}
 <div class="notice">
-  你当前仅能查看 {{ signals|length }} / {{ all_count }} 只。
-  开通周卡即可查看完整 Top10 候选池。
+  你当前是免费账号，仅能查看前 3 只。开通周卡 ¥39 后，可查看完整 Top10 候选池。
 </div>
 {% endif %}
+
+<section class="grid two" style="margin-top:18px;">
+  <div class="card">
+    <h3>如何使用这个榜单？</h3>
+    <ul class="clean">
+      <li>先观察候选池对应的热点方向</li>
+      <li>结合盘口、成交量和市场情绪二次判断</li>
+      <li>不要满仓，不要把榜单当成买入指令</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>数据说明</h3>
+    <p class="muted">
+      来源显示为 <strong>live-...</strong> 时，表示云端自动任务已抓取实时行情。
+      如果显示 fallback-demo，则说明数据源临时不可用，系统启用了备用数据。
+    </p>
+  </div>
+</section>
 
 {% endblock %}
