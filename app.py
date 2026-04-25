@@ -877,7 +877,7 @@ def health():
             except Exception:
                 source = "unreadable"
         history_files = len([f for f in os.listdir(HISTORY_DIR) if f.endswith(".json")]) if os.path.exists(HISTORY_DIR) else 0
-        return {"status": "ok", "version": "v7-final", "users": n, "orders": o, "signals": len(signals), "source": source, "source_label": source_label(source), "generated_at": generated_at, "history_files": history_files}
+        return {"status": "ok", "version": "v7.1-patch", "users": n, "orders": o, "signals": len(signals), "source": source, "source_label": source_label(source), "generated_at": generated_at, "history_files": history_files}
     except Exception as e:
         return {"status": "error", "message": str(e)}, 500
 
