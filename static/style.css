@@ -7,3 +7,5 @@ table tr:hover{background:rgba(255,255,255,.03)}
 
 .tag{display:inline-block;margin:2px 4px 2px 0;padding:4px 8px;border-radius:999px;background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.32);color:#fbbf24;font-size:12px;white-space:nowrap}
 td{vertical-align:top}
+
+.highlight-card{border-color:rgba(56,189,248,.65);box-shadow:0 0 0 1px rgba(56,189,248,.18),0 18px 40px rgba(56,189,248,.08)}

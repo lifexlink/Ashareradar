@@ -338,6 +338,43 @@ def orders():
     rows = get_user_orders(user["username"])
     return render_template("orders.html", user=user, orders=rows, plans=PLANS)
 
+
+@app.route("/admin/change-password", methods=["GET", "POST"])
+@admin_required
+def change_admin_password():
+    user = current_user()
+    if request.method == "POST":
+        old_password = request.form.get("old_password", "").strip()
+        new_password = request.form.get("new_password", "").strip()
+        confirm_password = request.form.get("confirm_password", "").strip()
+
+        if not check_password_hash(user["password_hash"], old_password):
+            flash("原密码错误")
+            return render_template("change_password.html", user=user)
+
+        if len(new_password) < 8:
+            flash("新密码至少8位")
+            return render_template("change_password.html", user=user)
+
+        if new_password != confirm_password:
+            flash("两次输入的新密码不一致")
+            return render_template("change_password.html", user=user)
+
+        conn = get_conn()
+        cur = conn.cursor()
+        cur.execute(
+            "UPDATE users SET password_hash = ? WHERE username = ?",
+            (generate_password_hash(new_password, method="pbkdf2:sha256"), user["username"])
+        )
+        conn.commit()
+        conn.close()
+
+        flash("管理员密码已修改，请重新登录")
+        session.clear()
+        return redirect(url_for("admin_login"))
+
+    return render_template("change_password.html", user=user)
+
 @app.route("/admin")
 @admin_required
 def admin():
