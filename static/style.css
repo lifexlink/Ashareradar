@@ -4,3 +4,6 @@ select{width:100%;padding:12px;border-radius:12px;border:1px solid var(--line);b
 .score-badge{display:inline-block;padding:6px 10px;border-radius:999px;background:rgba(56,189,248,.14);border:1px solid rgba(56,189,248,.35);color:#7dd3fc;font-weight:700}
 table tr:hover{background:rgba(255,255,255,.03)}
 .kpi{text-transform:uppercase;letter-spacing:.04em}
+
+.tag{display:inline-block;margin:2px 4px 2px 0;padding:4px 8px;border-radius:999px;background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.32);color:#fbbf24;font-size:12px;white-space:nowrap}
+td{vertical-align:top}

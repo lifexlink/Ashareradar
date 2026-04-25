@@ -1,76 +1,72 @@
-{
-  "generated_at": "2026-04-25T00:34:51.787158Z",
-  "source": "live-stock_zh_a_spot_em",
-  "signals": [
-    {
-      "rank": 1,
-      "code": "002407",
-      "name": "多氟多",
-      "score": 79.4,
-      "reason": "实时数据：涨跌幅 9.99%，成交活跃度靠前，来源 stock_zh_a_spot_em"
-    },
-    {
-      "rank": 2,
-      "code": "600338",
-      "name": "西藏珠峰",
-      "score": 79.14,
-      "reason": "实时数据：涨跌幅 9.99%，成交活跃度靠前，来源 stock_zh_a_spot_em"
-    },
-    {
-      "rank": 3,
-      "code": "000062",
-      "name": "深圳华强",
-      "score": 78.32,
-      "reason": "实时数据：涨跌幅 9.99%，成交活跃度靠前，来源 stock_zh_a_spot_em"
-    },
-    {
-      "rank": 4,
-      "code": "002176",
-      "name": "江特电机",
-      "score": 78.26,
-      "reason": "实时数据：涨跌幅 10.02%，成交活跃度靠前，来源 stock_zh_a_spot_em"
-    },
-    {
-      "rank": 5,
-      "code": "600633",
-      "name": "浙数文化",
-      "score": 78.1,
-      "reason": "实时数据：涨跌幅 9.99%，成交活跃度靠前，来源 stock_zh_a_spot_em"
-    },
-    {
-      "rank": 6,
-      "code": "300057",
-      "name": "万顺新材",
-      "score": 77.85,
-      "reason": "实时数据：涨跌幅 10.03%，成交活跃度靠前，来源 stock_zh_a_spot_em"
-    },
-    {
-      "rank": 7,
-      "code": "688629",
-      "name": "华丰科技",
-      "score": 77.76,
-      "reason": "实时数据：涨跌幅 10.03%，成交活跃度靠前，来源 stock_zh_a_spot_em"
-    },
-    {
-      "rank": 8,
-      "code": "000973",
-      "name": "佛塑科技",
-      "score": 77.52,
-      "reason": "实时数据：涨跌幅 10.02%，成交活跃度靠前，来源 stock_zh_a_spot_em"
-    },
-    {
-      "rank": 9,
-      "code": "002812",
-      "name": "恩捷股份",
-      "score": 77.51,
-      "reason": "实时数据：涨跌幅 10.01%，成交活跃度靠前，来源 stock_zh_a_spot_em"
-    },
-    {
-      "rank": 10,
-      "code": "000546",
-      "name": "金圆股份",
-      "score": 77.2,
-      "reason": "实时数据：涨跌幅 9.98%，成交活跃度靠前，来源 stock_zh_a_spot_em"
-    }
-  ]
-}
+[
+  {
+    "rank": 1,
+    "code": "300308",
+    "name": "中际旭创",
+    "score": 88,
+    "reason": "AI算力+板块热度+量价同步"
+  },
+  {
+    "rank": 2,
+    "code": "002230",
+    "name": "科大讯飞",
+    "score": 84,
+    "reason": "AI应用+情绪回暖+资金承接"
+  },
+  {
+    "rank": 3,
+    "code": "601138",
+    "name": "工业富联",
+    "score": 82,
+    "reason": "服务器链+成交活跃+趋势延续"
+  },
+  {
+    "rank": 4,
+    "code": "002371",
+    "name": "北方华创",
+    "score": 80,
+    "reason": "半导体设备+机构偏好"
+  },
+  {
+    "rank": 5,
+    "code": "300750",
+    "name": "宁德时代",
+    "score": 78,
+    "reason": "新能源权重+成交放大"
+  },
+  {
+    "rank": 6,
+    "code": "603019",
+    "name": "中科曙光",
+    "score": 77,
+    "reason": "算力设备+热点联动"
+  },
+  {
+    "rank": 7,
+    "code": "688981",
+    "name": "中芯国际",
+    "score": 75,
+    "reason": "芯片国产替代+趋势修复"
+  },
+  {
+    "rank": 8,
+    "code": "300124",
+    "name": "汇川技术",
+    "score": 74,
+    "reason": "高端制造+稳健趋势"
+  },
+  {
+    "rank": 9,
+    "code": "600941",
+    "name": "中国移动",
+    "score": 72,
+    "reason": "算力基建+防守属性"
+  },
+  {
+    "rank": 10,
+    "code": "002415",
+    "name": "海康威视",
+    "score": 71,
+    "reason": "AI视觉+估值修复"
+  }
+]

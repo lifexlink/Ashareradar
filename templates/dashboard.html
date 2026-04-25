@@ -34,7 +34,7 @@
 <div class="section-head">
   <div>
     <h2>今日强势候选池</h2>
-    <p class="muted">基于实时行情、涨跌幅和成交活跃度进行自动筛选。</p>
+    <p class="muted">基于实时行情、涨跌幅、成交额、换手率和活跃度自动筛选。</p>
   </div>
 </div>
 
@@ -46,6 +46,11 @@
         <th>代码</th>
         <th>名称</th>
         <th>评分</th>
+        <th>最新价</th>
+        <th>涨跌幅</th>
+        <th>成交额</th>
+        <th>换手率</th>
+        <th>标签</th>
         <th>筛选理由</th>
       </tr>
     </thead>
@@ -56,6 +61,19 @@
         <td>{{ item.code }}</td>
         <td><strong>{{ item.name }}</strong></td>
         <td><span class="score-badge">{{ item.score }}</span></td>
+        <td>{{ item.price if item.price is defined else '-' }}</td>
+        <td>{{ item.change_pct if item.change_pct is defined else '-' }}%</td>
+        <td>{{ item.amount if item.amount is defined else '-' }}</td>
+        <td>{{ item.turnover if item.turnover is defined else '-' }}%</td>
+        <td>
+          {% if item.signal_tags is defined %}
+            {% for tag in item.signal_tags %}
+              <span class="tag">{{ tag }}</span>
+            {% endfor %}
+          {% else %}
+            <span class="tag">强势候选</span>
+          {% endif %}
+        </td>
         <td>{{ item.reason }}</td>
       </tr>
       {% endfor %}
@@ -71,19 +89,20 @@
 
 <section class="grid two" style="margin-top:18px;">
   <div class="card">
-    <h3>如何使用这个榜单？</h3>
+    <h3>如何理解筛选理由？</h3>
     <ul class="clean">
-      <li>先观察候选池对应的热点方向</li>
-      <li>结合盘口、成交量和市场情绪二次判断</li>
-      <li>不要满仓，不要把榜单当成买入指令</li>
+      <li><strong>涨跌幅</strong>：代表当日价格动量，不等于未来会继续上涨。</li>
+      <li><strong>成交额</strong>：代表资金参与度，成交额越高流动性通常越好。</li>
+      <li><strong>换手率</strong>：代表筹码活跃程度，高换手也意味着波动风险更高。</li>
+      <li><strong>综合评分</strong>：由动量、成交额、换手率、涨速等因子合成。</li>
     </ul>
   </div>
 
   <div class="card">
-    <h3>数据说明</h3>
+    <h3>使用建议</h3>
     <p class="muted">
-      来源显示为 <strong>live-...</strong> 时，表示云端自动任务已抓取实时行情。
-      如果显示 fallback-demo，则说明数据源临时不可用，系统启用了备用数据。
+      本榜单适合用来快速观察热点与强势方向，不建议直接作为买入依据。
+      建议结合指数环境、板块强度、个股位置、盘口和风险偏好进行二次判断。
     </p>
   </div>
 </section>

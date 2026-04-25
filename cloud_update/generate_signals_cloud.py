@@ -4,18 +4,36 @@ from datetime import datetime
 
 OUTPUT_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data", "latest_signals.json")
 
+def fmt_num(value, digits=2):
+    try:
+        return round(float(value), digits)
+    except Exception:
+        return 0
+
+def fmt_amount_cn(value):
+    try:
+        v = float(value)
+        if v >= 100000000:
+            return f"{v / 100000000:.2f}亿"
+        if v >= 10000:
+            return f"{v / 10000:.2f}万"
+        return f"{v:.0f}"
+    except Exception:
+        return "-"
+
 def fallback_records(reason="fallback"):
+    rows = [
+        ("300308", "中际旭创", 88), ("002230", "科大讯飞", 84), ("601138", "工业富联", 82),
+        ("002371", "北方华创", 80), ("300750", "宁德时代", 78), ("603019", "中科曙光", 77),
+        ("688981", "中芯国际", 75), ("300124", "汇川技术", 74), ("600941", "中国移动", 72), ("002415", "海康威视", 71)
+    ]
     return "fallback-demo", [
-        {"rank": 1, "code": "300308", "name": "中际旭创", "score": 88, "reason": f"演示数据：{reason}"},
-        {"rank": 2, "code": "002230", "name": "科大讯飞", "score": 84, "reason": f"演示数据：{reason}"},
-        {"rank": 3, "code": "601138", "name": "工业富联", "score": 82, "reason": f"演示数据：{reason}"},
-        {"rank": 4, "code": "002371", "name": "北方华创", "score": 80, "reason": f"演示数据：{reason}"},
-        {"rank": 5, "code": "300750", "name": "宁德时代", "score": 78, "reason": f"演示数据：{reason}"},
-        {"rank": 6, "code": "603019", "name": "中科曙光", "score": 77, "reason": f"演示数据：{reason}"},
-        {"rank": 7, "code": "688981", "name": "中芯国际", "score": 75, "reason": f"演示数据：{reason}"},
-        {"rank": 8, "code": "300124", "name": "汇川技术", "score": 74, "reason": f"演示数据：{reason}"},
-        {"rank": 9, "code": "600941", "name": "中国移动", "score": 72, "reason": f"演示数据：{reason}"},
-        {"rank": 10, "code": "002415", "name": "海康威视", "score": 71, "reason": f"演示数据：{reason}"},
+        {
+            "rank": i + 1, "code": code, "name": name, "score": score,
+            "price": "-", "change_pct": "-", "amount": "-", "turnover": "-", "amplitude": "-", "speed": "-",
+            "signal_tags": ["演示数据"],
+            "reason": f"演示数据：{reason}"
+        } for i, (code, name, score) in enumerate(rows)
     ]
 
 def normalize_columns(df):
@@ -28,6 +46,8 @@ def normalize_columns(df):
         "volume": ["成交量", "volume"],
         "amount": ["成交额", "amount"],
         "turnover": ["换手率", "turnover"],
+        "speed": ["涨速"],
+        "amplitude": ["振幅"],
     }
     lower_map = {str(c).lower(): c for c in df.columns}
     for target, names in candidates.items():
@@ -47,6 +67,7 @@ def live_records():
     errors = []
     spot = None
     used_source = None
+
     for fn_name in ["stock_zh_a_spot_em", "stock_zh_a_spot", "stock_zh_a_spot_tx"]:
         try:
             df = getattr(ak, fn_name)()
@@ -61,7 +82,7 @@ def live_records():
     if spot is None or spot.empty:
         return fallback_records("; ".join(errors[-2:]))
 
-    for col in ["change_pct", "volume", "amount", "turnover"]:
+    for col in ["price", "change_pct", "volume", "amount", "turnover", "speed", "amplitude"]:
         if col not in spot.columns:
             spot[col] = 0
         spot[col] = pd.to_numeric(spot[col], errors="coerce").fillna(0)
@@ -72,15 +93,19 @@ def live_records():
     spot["name"] = spot["name"].astype(str)
     spot = spot[~spot["name"].str.contains("ST|退", regex=True, na=False)].copy()
 
-    amount_rank = spot["amount"].rank(pct=True) if "amount" in spot.columns else spot["volume"].rank(pct=True)
+    amount_rank = spot["amount"].rank(pct=True)
     volume_rank = spot["volume"].rank(pct=True)
     turnover_rank = spot["turnover"].rank(pct=True)
+    speed_rank = spot["speed"].rank(pct=True)
+    amplitude_rank = spot["amplitude"].rank(pct=True)
 
     spot["score"] = (
         spot["change_pct"].clip(lower=-20, upper=20) * 3.0
         + amount_rank.fillna(0) * 25
         + volume_rank.fillna(0) * 15
-        + turnover_rank.fillna(0) * 10
+        + turnover_rank.fillna(0) * 12
+        + speed_rank.fillna(0) * 6
+        + amplitude_rank.fillna(0) * 4
     )
 
     spot = spot[(spot["change_pct"] > 0) & (spot["change_pct"] < 10.05)].copy()
@@ -91,13 +116,60 @@ def live_records():
 
     records = []
     for i, row in spot.iterrows():
+        change_pct = fmt_num(row.get("change_pct", 0))
+        turnover = fmt_num(row.get("turnover", 0))
+        amplitude = fmt_num(row.get("amplitude", 0))
+        speed = fmt_num(row.get("speed", 0))
+        price = fmt_num(row.get("price", 0))
+        amount_raw = row.get("amount", 0)
+        amount_text = fmt_amount_cn(amount_raw)
+
+        tags = []
+        if change_pct >= 9:
+            tags.append("接近涨停")
+        elif change_pct >= 5:
+            tags.append("强势上涨")
+        if amount_raw >= 1000000000:
+            tags.append("成交额10亿+")
+        elif amount_raw >= 300000000:
+            tags.append("成交活跃")
+        if turnover >= 8:
+            tags.append("高换手")
+        elif turnover >= 3:
+            tags.append("换手较活跃")
+        if speed > 0:
+            tags.append("盘中上攻")
+        if not tags:
+            tags.append("强势候选")
+
+        reason_parts = [
+            f"涨跌幅 {change_pct}%",
+            f"成交额约 {amount_text}",
+            f"换手率 {turnover}%",
+        ]
+        if amplitude:
+            reason_parts.append(f"振幅 {amplitude}%")
+        if speed:
+            reason_parts.append(f"涨速 {speed}%")
+
+        reason = "；".join(reason_parts)
+        reason += f"。综合动量、成交额、换手率、涨速和活跃度排序，数据源：{used_source}。"
+
         records.append({
             "rank": i + 1,
             "code": str(row.get("code", "")),
             "name": str(row.get("name", "")),
             "score": round(float(row.get("score", 0)), 2),
-            "reason": f"实时数据：涨跌幅 {round(float(row.get('change_pct', 0)), 2)}%，成交活跃度靠前，来源 {used_source}"
+            "price": price,
+            "change_pct": change_pct,
+            "amount": amount_text,
+            "turnover": turnover,
+            "amplitude": amplitude,
+            "speed": speed,
+            "signal_tags": tags,
+            "reason": reason
         })
+
     return f"live-{used_source}", records
 
 def write_output(source, records):
