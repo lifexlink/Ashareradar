@@ -1,0 +1,74 @@
+{% extends "layout.html" %}{% block body %}
+
+<h2>每日复盘</h2>
+<div class="notice">
+  ⚠ 复盘用于观察市场热度和候选池质量，不构成投资建议。
+</div>
+
+{% if latest %}
+<section class="grid three" style="margin:18px 0;">
+  <div class="card">
+    <div class="kpi">复盘日期</div>
+    <h3>{{ latest_summary.date }}</h3>
+    <p class="muted">{{ latest_summary.source }}</p>
+  </div>
+  <div class="card">
+    <div class="kpi">Top3 平均涨跌幅</div>
+    <h3>{{ latest_summary.top3_avg if latest_summary.top3_avg is not none else '-' }}%</h3>
+    <p class="muted">用于观察榜首强度</p>
+  </div>
+  <div class="card">
+    <div class="kpi">接近涨停数</div>
+    <h3>{{ latest_summary.limit_up }}</h3>
+    <p class="muted">涨跌幅 ≥ 9.8%</p>
+  </div>
+</section>
+
+<div class="card">
+  <h3>今日候选池复盘</h3>
+  <table>
+    <thead>
+      <tr><th>排名</th><th>代码</th><th>名称</th><th>涨跌幅</th><th>成交额</th><th>标签</th><th>理由</th></tr>
+    </thead>
+    <tbody>
+      {% for item in latest.signals %}
+      <tr>
+        <td>#{{ item.rank }}</td>
+        <td>{{ item.code }}</td>
+        <td><strong>{{ item.name }}</strong></td>
+        <td>{{ item.change_pct if item.change_pct is defined else '-' }}%</td>
+        <td>{{ item.amount if item.amount is defined else '-' }}</td>
+        <td>
+          {% if item.signal_tags is defined %}
+            {% for tag in item.signal_tags %}<span class="tag">{{ tag }}</span>{% endfor %}
+          {% else %}<span class="tag">候选</span>{% endif %}
+        </td>
+        <td>{{ item.reason }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<div class="card">暂无复盘数据。请先运行云端自动更新。</div>
+{% endif %}
+
+<section class="grid two" style="margin-top:18px;">
+  <div class="card">
+    <h3>复盘结论模板</h3>
+    <ul class="clean">
+      <li>如果 Top3 同时接近涨停，说明短线情绪较强。</li>
+      <li>如果成交额高但涨幅回落，说明分歧较大。</li>
+      <li>如果高换手较多，说明波动机会和风险同时放大。</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h3>下一步观察</h3>
+    <p class="muted">
+      重点观察榜单是否集中在同一热点方向，以及次日是否出现持续性。
+      不建议单独依据榜单做买卖决策。
+    </p>
+  </div>
+</section>
+
+{% endblock %}

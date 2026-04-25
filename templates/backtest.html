@@ -1,0 +1,65 @@
+{% extends "layout.html" %}{% block body %}
+
+<h2>历史表现</h2>
+<div class="notice">
+  ⚠ 历史表现仅为已生成候选池的当日统计，不代表未来表现，不构成投资建议。
+</div>
+
+<section class="grid three" style="margin:18px 0;">
+  <div class="card">
+    <div class="kpi">记录天数</div>
+    <h3>{{ stats.days }}</h3>
+    <p class="muted">由 GitHub Actions 自动保存历史快照</p>
+  </div>
+  <div class="card">
+    <div class="kpi">近7日 Top3 平均</div>
+    <h3>{{ stats.last7_top3_avg if stats.last7_top3_avg is not none else '-' }}%</h3>
+    <p class="muted">仅统计已有历史文件</p>
+  </div>
+  <div class="card">
+    <div class="kpi">近7日涨停数量</div>
+    <h3>{{ stats.last7_limit_up }}</h3>
+    <p class="muted">涨跌幅 ≥ 9.8% 计为接近涨停</p>
+  </div>
+</section>
+
+<div class="card">
+  <table>
+    <thead>
+      <tr>
+        <th>日期</th>
+        <th>Top3平均涨跌幅</th>
+        <th>Top10平均涨跌幅</th>
+        <th>上涨数</th>
+        <th>接近涨停数</th>
+        <th>榜首候选</th>
+        <th>数据源</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for r in summaries %}
+      <tr>
+        <td>{{ r.date }}</td>
+        <td>{{ r.top3_avg if r.top3_avg is not none else '-' }}%</td>
+        <td>{{ r.top10_avg if r.top10_avg is not none else '-' }}%</td>
+        <td>{{ r.up_count }}/{{ r.total }}</td>
+        <td>{{ r.limit_up }}</td>
+        <td>{{ r.strongest_name }}（{{ r.strongest_code }}） {{ r.strongest_change }}%</td>
+        <td>{{ r.source }}</td>
+      </tr>
+      {% else %}
+      <tr><td colspan="7">暂无历史记录。请先运行 GitHub Actions 的 Update signals。</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<section class="card" style="margin-top:18px;">
+  <h3>回测口径说明</h3>
+  <p class="muted">
+    当前版本为轻量历史统计：保存每次云端任务生成的候选池，并统计候选股当时的涨跌幅、上涨数量和接近涨停数量。
+    后续可升级为“候选日收盘价 vs 次日收盘价”的严格回测。
+  </p>
+</section>
+
+{% endblock %}

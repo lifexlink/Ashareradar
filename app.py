@@ -6,6 +6,7 @@ from datetime import datetime, timedelta
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DB_PATH = os.path.join(BASE_DIR, "users.db")
 DATA_PATH = os.path.join(BASE_DIR, "data", "latest_signals.json")
+HISTORY_DIR = os.path.join(BASE_DIR, "data", "history")
 ALLOWED_UPLOAD_EXTENSIONS = {"json"}
 
 app = Flask(__name__)
@@ -65,6 +66,17 @@ def init_db():
         created_at TEXT NOT NULL,
         approved_at TEXT,
         rejected_at TEXT
+    )
+    """)
+    cur.execute("""
+    CREATE TABLE IF NOT EXISTS feedback (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        username TEXT,
+        nickname TEXT,
+        content TEXT NOT NULL,
+        status TEXT NOT NULL DEFAULT 'pending',
+        created_at TEXT NOT NULL,
+        reviewed_at TEXT
     )
     """)
     conn.commit()
@@ -137,6 +149,83 @@ def load_signal_meta():
             meta["source"] = "unreadable"
     return meta
 
+
+def load_history_records(limit=30):
+    records = []
+    if not os.path.exists(HISTORY_DIR):
+        return records
+    files = sorted([f for f in os.listdir(HISTORY_DIR) if f.endswith(".json")], reverse=True)
+    for fname in files[:limit]:
+        path = os.path.join(HISTORY_DIR, fname)
+        try:
+            with open(path, "r", encoding="utf-8") as f:
+                payload = json.load(f)
+            signals = payload.get("signals", payload if isinstance(payload, list) else [])
+            date = payload.get("date") or fname.replace(".json", "")
+            source = payload.get("source", "unknown")
+            generated_at = payload.get("generated_at")
+            records.append({
+                "date": date,
+                "source": source,
+                "generated_at": generated_at,
+                "signals": signals
+            })
+        except Exception:
+            continue
+    return records
+
+def pct_value(x):
+    try:
+        if x in ("-", None, ""):
+            return None
+        return float(x)
+    except Exception:
+        return None
+
+def summarize_snapshot(snapshot):
+    signals = snapshot.get("signals", [])
+    changes = [pct_value(s.get("change_pct")) for s in signals]
+    changes = [x for x in changes if x is not None]
+    top3_changes = [pct_value(s.get("change_pct")) for s in signals[:3]]
+    top3_changes = [x for x in top3_changes if x is not None]
+
+    def avg(vals):
+        return round(sum(vals) / len(vals), 2) if vals else None
+
+    limit_up = 0
+    up_count = 0
+    for s in signals:
+        ch = pct_value(s.get("change_pct"))
+        if ch is None:
+            continue
+        if ch >= 9.8:
+            limit_up += 1
+        if ch > 0:
+            up_count += 1
+
+    strongest = signals[0] if signals else {}
+    return {
+        "date": snapshot.get("date"),
+        "source": snapshot.get("source"),
+        "generated_at": snapshot.get("generated_at"),
+        "top3_avg": avg(top3_changes),
+        "top10_avg": avg(changes),
+        "limit_up": limit_up,
+        "up_count": up_count,
+        "total": len(signals),
+        "strongest_name": strongest.get("name", "-"),
+        "strongest_code": strongest.get("code", "-"),
+        "strongest_change": strongest.get("change_pct", "-"),
+    }
+
+def get_public_feedback(limit=6):
+    conn = get_conn()
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM feedback WHERE status = 'approved' ORDER BY id DESC LIMIT ?", (limit,))
+    rows = cur.fetchall()
+    conn.close()
+    return rows
+
 def get_user(username):
     conn = get_conn()
     cur = conn.cursor()
@@ -204,7 +293,10 @@ def admin_required(fn):
 @app.route("/")
 def index():
     user = current_user()
-    return render_template("index.html", user=user, plans=PLANS)
+    history = load_history_records(limit=1)
+    latest_summary = summarize_snapshot(history[0]) if history else None
+    feedback_items = get_public_feedback(limit=3)
+    return render_template("index.html", user=user, plans=PLANS, latest_summary=latest_summary, feedback_items=feedback_items)
 
 @app.route("/disclaimer")
 def disclaimer():
@@ -375,6 +467,89 @@ def change_admin_password():
 
     return render_template("change_password.html", user=user)
 
+
+@app.route("/backtest")
+def backtest():
+    history = load_history_records(limit=30)
+    summaries = [summarize_snapshot(h) for h in history]
+    last7 = summaries[:7]
+    def avg_field(rows, field):
+        vals = [r.get(field) for r in rows if r.get(field) is not None]
+        return round(sum(vals) / len(vals), 2) if vals else None
+    stats = {
+        "days": len(summaries),
+        "last7_top3_avg": avg_field(last7, "top3_avg"),
+        "last7_top10_avg": avg_field(last7, "top10_avg"),
+        "last7_limit_up": sum([r.get("limit_up", 0) for r in last7]),
+        "last7_up_count": sum([r.get("up_count", 0) for r in last7]),
+        "last7_total": sum([r.get("total", 0) for r in last7]),
+    }
+    return render_template("backtest.html", summaries=summaries, stats=stats)
+
+@app.route("/review")
+def review():
+    history = load_history_records(limit=2)
+    latest = history[0] if history else None
+    previous = history[1] if len(history) > 1 else None
+    latest_summary = summarize_snapshot(latest) if latest else None
+    previous_summary = summarize_snapshot(previous) if previous else None
+    return render_template("review.html", latest=latest, previous=previous, latest_summary=latest_summary, previous_summary=previous_summary)
+
+@app.route("/methodology")
+def methodology():
+    return render_template("methodology.html")
+
+@app.route("/feedback", methods=["GET", "POST"])
+@login_required
+def feedback():
+    user = current_user()
+    if request.method == "POST":
+        nickname = request.form.get("nickname", "").strip()
+        content = request.form.get("content", "").strip()
+        if len(content) < 5:
+            flash("反馈内容至少5个字")
+            return render_template("feedback.html", user=user)
+        banned_words = ["稳赚", "包赚", "必涨", "内幕", "保证收益", "荐股", "跟着买"]
+        if any(w in content for w in banned_words):
+            flash("反馈中请避免收益承诺、荐股或误导性表述")
+            return render_template("feedback.html", user=user)
+        conn = get_conn()
+        cur = conn.cursor()
+        cur.execute(
+            "INSERT INTO feedback (username, nickname, content, status, created_at) VALUES (?, ?, ?, 'pending', ?)",
+            (user["username"], nickname, content, now().isoformat())
+        )
+        conn.commit()
+        conn.close()
+        flash("反馈已提交，审核后可能展示在首页")
+        return redirect(url_for("feedback"))
+    return render_template("feedback.html", user=user)
+
+@app.route("/admin/feedback")
+@admin_required
+def admin_feedback():
+    conn = get_conn()
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM feedback ORDER BY id DESC")
+    feedback_rows = cur.fetchall()
+    conn.close()
+    user = current_user()
+    return render_template("admin_feedback.html", user=user, feedback_rows=feedback_rows)
+
+@app.route("/admin/feedback/<int:feedback_id>/<action>", methods=["POST"])
+@admin_required
+def admin_feedback_action(feedback_id, action):
+    if action not in ["approved", "rejected", "hidden"]:
+        flash("操作无效")
+        return redirect(url_for("admin_feedback"))
+    conn = get_conn()
+    cur = conn.cursor()
+    cur.execute("UPDATE feedback SET status = ?, reviewed_at = ? WHERE id = ?", (action, now().isoformat(), feedback_id))
+    conn.commit()
+    conn.close()
+    flash("反馈状态已更新")
+    return redirect(url_for("admin_feedback"))
+
 @app.route("/admin")
 @admin_required
 def admin():
@@ -489,7 +664,8 @@ def health():
                         source = "list"
             except Exception:
                 source = "unreadable"
-        return {"status": "ok", "users": n, "orders": o, "signals": len(signals), "source": source, "generated_at": generated_at}
+        history_files = len([f for f in os.listdir(HISTORY_DIR) if f.endswith(".json")]) if os.path.exists(HISTORY_DIR) else 0
+        return {"status": "ok", "users": n, "orders": o, "signals": len(signals), "source": source, "generated_at": generated_at, "history_files": history_files}
     except Exception as e:
         return {"status": "error", "message": str(e)}, 500
 

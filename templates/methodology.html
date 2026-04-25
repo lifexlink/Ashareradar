@@ -1,0 +1,41 @@
+{% extends "layout.html" %}{% block body %}
+<h2>算法说明</h2>
+<div class="notice">
+  本页面用于说明筛选逻辑，帮助用户理解工具边界。本系统不是荐股服务，不承诺收益。
+</div>
+
+<section class="grid two" style="margin-top:18px;">
+  <div class="card">
+    <h3>当前筛选因子</h3>
+    <ul class="clean">
+      <li>价格动量：当日涨跌幅</li>
+      <li>资金参与：成交额排名</li>
+      <li>流动活跃：成交量排名</li>
+      <li>筹码活跃：换手率</li>
+      <li>盘中强弱：涨速、振幅</li>
+      <li>风险过滤：剔除 ST、退市等异常标的</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>同类工具常见方向</h3>
+    <ul class="clean">
+      <li>同花顺/i问财：自然语言选股、条件选股、AI诊股</li>
+      <li>东方财富/Choice：资金流、板块监控、行情数据、研报资讯</li>
+      <li>短线工具：涨停聚焦、连板天梯、封单、炸板、情绪周期</li>
+      <li>通达信公式：用户自定义指标、量比、突破、资金类公式</li>
+    </ul>
+  </div>
+</section>
+
+<section class="card" style="margin-top:18px;">
+  <h3>下一阶段算法升级方向</h3>
+  <ul class="clean">
+    <li>加入板块热度：同板块涨停数、板块涨幅、龙头持续性</li>
+    <li>加入涨停质量：封单强度、开板次数、首次封板时间</li>
+    <li>加入历史持续性：入选后1日/3日表现统计</li>
+    <li>加入风险过滤：高位放量回落、异常波动、退潮信号</li>
+    <li>加入用户自选偏好：低价股/高成交额/高换手/趋势股筛选</li>
+  </ul>
+</section>
+{% endblock %}

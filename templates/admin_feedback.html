@@ -1,0 +1,30 @@
+{% extends "layout.html" %}{% block body %}
+<h2>用户反馈管理</h2>
+<p><a class="btn" href="{{ url_for('admin') }}">返回后台</a></p>
+<div class="card">
+  <table>
+    <thead>
+      <tr><th>ID</th><th>用户</th><th>昵称</th><th>内容</th><th>状态</th><th>时间</th><th>操作</th></tr>
+    </thead>
+    <tbody>
+      {% for f in feedback_rows %}
+      <tr>
+        <td>{{ f.id }}</td>
+        <td>{{ f.username }}</td>
+        <td>{{ f.nickname or '' }}</td>
+        <td>{{ f.content }}</td>
+        <td>{{ f.status }}</td>
+        <td>{{ f.created_at }}</td>
+        <td>
+          <form method="post" action="{{ url_for('admin_feedback_action', feedback_id=f.id, action='approved') }}" style="display:inline"><button class="btn small primary">展示</button></form>
+          <form method="post" action="{{ url_for('admin_feedback_action', feedback_id=f.id, action='hidden') }}" style="display:inline"><button class="btn small">隐藏</button></form>
+          <form method="post" action="{{ url_for('admin_feedback_action', feedback_id=f.id, action='rejected') }}" style="display:inline"><button class="btn small">拒绝</button></form>
+        </td>
+      </tr>
+      {% else %}
+      <tr><td colspan="7">暂无反馈</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

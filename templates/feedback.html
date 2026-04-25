@@ -1,0 +1,17 @@
+{% extends "layout.html" %}{% block body %}
+<div class="auth-card">
+  <h2>提交用户反馈</h2>
+  <p class="muted">
+    欢迎提交使用体验或建议。请避免“收益承诺、荐股、跟买”等表述。
+  </p>
+  <form method="post" class="form">
+    <label>展示昵称（可选）
+      <input name="nickname" placeholder="例如：老王 / 短线观察者">
+    </label>
+    <label>反馈内容
+      <textarea name="content" rows="5" required placeholder="例如：这个工具帮我更快看到热点方向，适合盘前/盘中观察。"></textarea>
+    </label>
+    <button class="btn primary" type="submit">提交反馈</button>
+  </form>
+</div>
+{% endblock %}

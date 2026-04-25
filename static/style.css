@@ -9,3 +9,6 @@ table tr:hover{background:rgba(255,255,255,.03)}
 td{vertical-align:top}
 
 .highlight-card{border-color:rgba(56,189,248,.65);box-shadow:0 0 0 1px rgba(56,189,248,.18),0 18px 40px rgba(56,189,248,.08)}
+
+textarea{width:100%;padding:12px;border-radius:12px;border:1px solid var(--line);background:#0d1429;color:#fff;resize:vertical}
+.quote{border-left:3px solid rgba(56,189,248,.65);padding:10px 0 10px 14px;margin:10px 0;color:#e6eefc}

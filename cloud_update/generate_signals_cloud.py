@@ -173,14 +173,23 @@ def live_records():
     return f"live-{used_source}", records
 
 def write_output(source, records):
+    today = datetime.utcnow().strftime("%Y-%m-%d")
     payload = {
+        "date": today,
         "generated_at": datetime.utcnow().isoformat() + "Z",
         "source": source,
         "signals": records
     }
     with open(OUTPUT_PATH, "w", encoding="utf-8") as f:
         json.dump(payload, f, ensure_ascii=False, indent=2)
-    print(json.dumps({"source": source, "count": len(records)}, ensure_ascii=False))
+
+    history_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data", "history")
+    os.makedirs(history_dir, exist_ok=True)
+    history_path = os.path.join(history_dir, f"{today}.json")
+    with open(history_path, "w", encoding="utf-8") as f:
+        json.dump(payload, f, ensure_ascii=False, indent=2)
+
+    print(json.dumps({"source": source, "count": len(records), "history": history_path}, ensure_ascii=False))
 
 if __name__ == "__main__":
     try:
