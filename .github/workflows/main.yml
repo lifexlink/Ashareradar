@@ -3,7 +3,9 @@ name: Update signals
 on:
   workflow_dispatch:
   schedule:
-    - cron: "5 1 * * 1-5"
+    - cron: "0 1 * * 1-5"
+    - cron: "0 5 * * 1-5"
+    - cron: "0 7 * * 1-5"
 
 permissions:
   contents: write
@@ -13,10 +15,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
@@ -36,4 +38,3 @@ jobs:
           git add data/latest_signals.json data/history/*.json
           git diff --cached --quiet || git commit -m "update signals"
           git push
-    
