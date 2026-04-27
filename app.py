@@ -310,7 +310,33 @@ def get_public_feedback(limit=6):
     rows = cur.fetchall()
     conn.close()
     return rows
+    
+def get_public_stats():
+    conn = get_conn()
+    cur = conn.cursor()
 
+    stats = {
+        "users": 0,
+        "orders": 0,
+        "paid_orders": 0
+    }
+
+    try:
+        cur.execute("SELECT COUNT(*) as n FROM users")
+        stats["users"] = cur.fetchone()["n"]
+
+        cur.execute("SELECT COUNT(*) as n FROM orders")
+        stats["orders"] = cur.fetchone()["n"]
+
+        cur.execute("SELECT COUNT(*) as n FROM orders WHERE status = 'approved'")
+        stats["paid_orders"] = cur.fetchone()["n"]
+
+    except Exception as e:
+        print("stats error:", e)
+
+    conn.close()
+    return stats
+    
 def get_user(username):
     conn = get_conn()
     cur = conn.cursor()
@@ -381,8 +407,17 @@ def index():
     history = load_history_records(limit=1)
     latest_summary = summarize_snapshot(history[0]) if history else None
     feedback_items = get_public_feedback(limit=3)
-    return render_template("index.html", user=user, plans=PLANS, latest_summary=latest_summary, feedback_items=feedback_items)
-
+    public_stats = get_public_stats()
+    
+    return render_template(
+        "index.html",
+        user=user,
+        plans=PLANS,
+        latest_summary=latest_summary,
+        feedback_items=feedback_items,
+        public_stats=public_stats
+    )
+    
 @app.route("/disclaimer")
 def disclaimer():
     return render_template("disclaimer.html")
