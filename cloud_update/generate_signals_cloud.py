@@ -117,7 +117,17 @@ def live_records():
     records = []
     for i, row in spot.iterrows():
         change_pct = fmt_num(row.get("change_pct", 0))
-        turnover = fmt_num(row.get("turnover", 0))
+       # ✅ 修复换手率
+        raw_turnover = (
+            row.get("turnover_rate") or
+            row.get("turnover") or
+            row.get("换手率")
+        )
+
+        if raw_turnover in [0, 0.0, None]:
+            turnover = None
+        else:
+            turnover = fmt_num(raw_turnover)
         amplitude = fmt_num(row.get("amplitude", 0))
         speed = fmt_num(row.get("speed", 0))
         price = fmt_num(row.get("price", 0))
@@ -176,7 +186,8 @@ def write_output(source, records):
     today = datetime.utcnow().strftime("%Y-%m-%d")
     payload = {
         "date": today,
-        "generated_at": datetime.utcnow().isoformat() + "Z",
+       from datetime import datetime, timedelta
+       generated_at = (datetime.utcnow() + timedelta(hours=8)).strftime("%Y-%m-%d %H:%M:%S")
         "source": source,
         "signals": records
     }
