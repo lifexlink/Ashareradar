@@ -1,1 +1,80 @@
-<h2>V7.5 支付页</h2>
+{% extends "layout.html" %}{% block body %}
+
+<h2>{{ plan.name }}开通</h2>
+
+<div class="notice" style="margin-bottom:18px;">
+  ⚠ 本服务仅提供数据筛选工具，不构成投资建议。开通即视为同意
+  <a href="{{ url_for('disclaimer') }}" style="color:#38bdf8;text-decoration:underline;">免责声明</a>。
+</div>
+
+<div class="grid two">
+  <div class="card">
+    <div class="tag">当前选择：{{ plan.name }}</div>
+    <p class="price">{{ plan.price }}</p>
+
+    <h3>开通后你将获得：</h3>
+    <ul class="clean">
+      <li>完整 Top10 候选池</li>
+      <li>每只股票评分与筛选理由</li>
+      <li>涨跌幅 / 成交额 / 换手率 / 标签</li>
+      <li>会员期内可持续查看数据页</li>
+    </ul>
+
+    <p class="notice">
+      付款后提交订单，系统生成唯一订单号。管理员核对到账后，一键开通权限。
+    </p>
+
+    <div class="qr-wrap">
+      <div>
+        <h4>微信扫码支付</h4>
+        <img class="qr" src="{{ url_for('static', filename='wechat_qr.jpg') }}" alt="wechat qr">
+      </div>
+      <div>
+        <h4>支付宝扫码支付</h4>
+        <img class="qr" src="{{ url_for('static', filename='alipay_qr.jpg') }}" alt="alipay qr">
+      </div>
+    </div>
+
+    <p class="muted" style="font-size:13px;">
+      如果二维码未显示，请确认 static/wechat_qr.jpg 与 static/alipay_qr.jpg 已上传。
+    </p>
+  </div>
+
+  <div class="card">
+    <h3>付款后提交订单</h3>
+    <p class="muted">
+      请填写付款昵称、付款方式和备注。建议备注里写：套餐 + 付款时间，方便快速开通。
+    </p>
+
+    <form method="post" class="form">
+      <label>付款方式
+        <select name="payment_method">
+          <option value="wechat">微信支付</option>
+          <option value="alipay">支付宝</option>
+          <option value="other">其他</option>
+        </select>
+      </label>
+
+      <label>付款人昵称
+        <input name="payer_name" placeholder="例如：微信昵称 / 支付宝昵称">
+      </label>
+
+      <label>付款备注
+        <input name="payer_note" placeholder="例如：周卡39，10:35已付">
+      </label>
+
+      <label style="display:flex;gap:10px;align-items:flex-start;font-size:13px;color:#9fb0d1;">
+        <input type="checkbox" required style="width:auto;margin-top:3px;">
+        <span>我已阅读并同意免责声明，理解本服务不构成投资建议。</span>
+      </label>
+
+      <button class="btn primary" type="submit">我已付款，生成订单并提交审核</button>
+    </form>
+
+    <div class="notice">
+      提交后可在“我的订单”查看状态。若长时间未开通，请把订单号发给管理员核对。
+    </div>
+  </div>
+</div>
+
+{% endblock %}

@@ -1,1 +1,70 @@
-<h2>V7.5 套餐页</h2>
+{% extends "layout.html" %}{% block body %}
+
+<h2>选择会员套餐</h2>
+<p class="muted">建议先开通周卡体验。所有内容仅用于市场观察，不构成投资建议。</p>
+
+<div class="notice" style="margin-bottom:18px;">
+  内测阶段先开放少量体验名额。免费账号可看 Top3，付费账号可看完整 Top10 与更完整的筛选理由。
+</div>
+
+<div class="grid three">
+  {% for key, plan in plans.items() %}
+  <div class="card {% if key == 'week' %}highlight-card{% endif %}">
+    {% if key == 'week' %}
+    <div class="tag">推荐先体验</div>
+    {% elif key == 'month' %}
+    <div class="tag">持续观察</div>
+    {% else %}
+    <div class="tag">长期用户</div>
+    {% endif %}
+
+    <h3>{{ plan.name }}</h3>
+    <p class="price">{{ plan.price }}</p>
+
+    {% if key == 'week' %}
+    <p>适合第一次体验，低成本查看完整 Top10。</p>
+    {% elif key == 'month' %}
+    <p>适合持续观察市场热点与短线情绪。</p>
+    {% else %}
+    <p>适合长期使用者，后续功能升级优先体验。</p>
+    {% endif %}
+
+    <ul class="clean">
+      <li>完整 Top10 候选池</li>
+      <li>涨跌幅 / 成交额 / 换手率</li>
+      <li>标签化筛选理由</li>
+      <li>会员期内持续查看</li>
+    </ul>
+
+    {% if session.get('user') %}
+      <a class="btn primary" href="{{ url_for('pay', plan_code=key) }}">立即开通</a>
+    {% else %}
+      <a class="btn primary" href="{{ url_for('login') }}">先登录后开通</a>
+    {% endif %}
+  </div>
+  {% endfor %}
+</div>
+
+<section class="grid two" style="margin-top:20px;">
+  <div class="card">
+    <h3>为什么不是直接荐股？</h3>
+    <p class="muted">
+      因为市场风险不可控。本系统定位是数据筛选与市场观察工具，帮助你减少手动筛选时间，
+      但最终买卖决策仍需你自行判断。
+    </p>
+  </div>
+
+  <div class="card">
+    <h3>内测用户建议</h3>
+    <p class="muted">
+      先用周卡观察 3-5 个交易日，重点看候选池是否能帮助你更快发现市场热点。
+      如果对你的复盘和观察有帮助，再考虑月卡。
+    </p>
+  </div>
+</section>
+
+<div class="notice">
+  ⚠ 本服务仅提供数据筛选与市场观察工具，不提供个股买卖建议，不承诺收益。
+</div>
+
+{% endblock %}
