@@ -1,3 +1,4 @@
+from datetime import datetime, timedelta
 import json
 import os
 from datetime import datetime
@@ -186,7 +187,7 @@ def write_output(source, records):
     today = datetime.utcnow().strftime("%Y-%m-%d")
     payload = {
         "date": today,
-       from datetime import datetime, timedelta
+    
        generated_at = (datetime.utcnow() + timedelta(hours=8)).strftime("%Y-%m-%d %H:%M:%S")
         "source": source,
         "signals": records
