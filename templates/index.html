@@ -2,15 +2,16 @@
 
 <section class="hero">
   <div>
-    <h1>每日自动筛选A股强势候选池</h1>
-      <div style="margin-top:10px;color:#9fb0d1;font-size:14px;">
-       已有 <strong>{{ public_stats.users }}</strong> 人使用，
-       <strong>{{ public_stats.paid_orders }}</strong> 人已开通
-      </div>
+    <h1>每天自动筛出A股强势候选池</h1>
     <p>
-      基于实时行情、涨跌幅、成交额、换手率和活跃度，自动生成 Top10 候选池。
-      免费查看 Top3，开通后解锁完整 Top10、历史表现和每日复盘。
+       不用自己翻几千只股票，系统自动筛选市场最强势个股，
+       帮你快速观察热点。
     </p>
+    <!-- 👇 就加在这里 -->
+    <div style="margin-top:10px;color:#9fb0d1;font-size:14px;">
+      已有 <strong>{{ public_stats.users if public_stats else 0 }}</strong> 人使用，
+      <strong>{{ public_stats.paid_orders if public_stats else 0 }}</strong> 人已开通
+    </div>
 
     <div class="cta-row">
       {% if session.get('user') %}
