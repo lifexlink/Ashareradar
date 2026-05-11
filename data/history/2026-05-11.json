@@ -1,177 +1,167 @@
 {
   "date": "2026-05-11",
-  "generated_at": "2026-05-11 16:26:46",
-  "source": "live-stock_zh_a_spot",
+  "generated_at": "2026-05-11 18:36:24",
+  "source": "fallback-demo",
   "signals": [
     {
       "rank": 1,
-      "code": "sh600601",
-      "name": "方正科技",
-      "score": 80.47,
-      "price": 13.33,
-      "change_pct": 9.98,
-      "amount": "53.76亿",
-      "turnover": null,
-      "amplitude": 0.0,
-      "speed": 0.0,
+      "code": "300308",
+      "name": "中际旭创",
+      "score": 88,
+      "price": "-",
+      "change_pct": "-",
+      "amount": "-",
+      "turnover": "-",
+      "amplitude": "-",
+      "speed": "-",
       "signal_tags": [
-        "接近涨停",
-        "成交额10亿+"
+        "演示数据"
       ],
-      "reason": "涨跌幅 9.98%；成交额约 53.76亿；换手率 -%。综合动量、成交额、换手率、涨速和活跃度排序，数据源：东方财富A股行情。"
+      "reason": "演示数据：stock_zh_a_spot: ('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer')); stock_zh_a_spot_tx: module 'akshare' has no attribute 'stock_zh_a_spot_tx'"
     },
     {
       "rank": 2,
-      "code": "sh600584",
-      "name": "长电科技",
-      "score": 80.39,
-      "price": 55.83,
-      "change_pct": 10.01,
-      "amount": "89.72亿",
-      "turnover": null,
-      "amplitude": 0.0,
-      "speed": 0.0,
+      "code": "002230",
+      "name": "科大讯飞",
+      "score": 84,
+      "price": "-",
+      "change_pct": "-",
+      "amount": "-",
+      "turnover": "-",
+      "amplitude": "-",
+      "speed": "-",
       "signal_tags": [
-        "接近涨停",
-        "成交额10亿+"
+        "演示数据"
       ],
-      "reason": "涨跌幅 10.01%；成交额约 89.72亿；换手率 -%。综合动量、成交额、换手率、涨速和活跃度排序，数据源：东方财富A股行情。"
+      "reason": "演示数据：stock_zh_a_spot: ('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer')); stock_zh_a_spot_tx: module 'akshare' has no attribute 'stock_zh_a_spot_tx'"
     },
     {
       "rank": 3,
-      "code": "sh600330",
-      "name": "天通股份",
-      "score": 79.76,
-      "price": 32.08,
-      "change_pct": 10.01,
-      "amount": "40.95亿",
-      "turnover": null,
-      "amplitude": 0.0,
-      "speed": 0.0,
+      "code": "601138",
+      "name": "工业富联",
+      "score": 82,
+      "price": "-",
+      "change_pct": "-",
+      "amount": "-",
+      "turnover": "-",
+      "amplitude": "-",
+      "speed": "-",
       "signal_tags": [
-        "接近涨停",
-        "成交额10亿+"
+        "演示数据"
       ],
-      "reason": "涨跌幅 10.01%；成交额约 40.95亿；换手率 -%。综合动量、成交额、换手率、涨速和活跃度排序，数据源：东方财富A股行情。"
+      "reason": "演示数据：stock_zh_a_spot: ('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer')); stock_zh_a_spot_tx: module 'akshare' has no attribute 'stock_zh_a_spot_tx'"
     },
     {
       "rank": 4,
-      "code": "sh600396",
-      "name": "华电辽能",
-      "score": 79.67,
-      "price": 13.68,
-      "change_pct": 9.97,
-      "amount": "31.64亿",
-      "turnover": null,
-      "amplitude": 0.0,
-      "speed": 0.0,
+      "code": "002371",
+      "name": "北方华创",
+      "score": 80,
+      "price": "-",
+      "change_pct": "-",
+      "amount": "-",
+      "turnover": "-",
+      "amplitude": "-",
+      "speed": "-",
       "signal_tags": [
-        "接近涨停",
-        "成交额10亿+"
+        "演示数据"
       ],
-      "reason": "涨跌幅 9.97%；成交额约 31.64亿；换手率 -%。综合动量、成交额、换手率、涨速和活跃度排序，数据源：东方财富A股行情。"
+      "reason": "演示数据：stock_zh_a_spot: ('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer')); stock_zh_a_spot_tx: module 'akshare' has no attribute 'stock_zh_a_spot_tx'"
     },
     {
       "rank": 5,
-      "code": "sz002281",
-      "name": "光迅科技",
-      "score": 79.63,
-      "price": 198.79,
-      "change_pct": 10.0,
-      "amount": "147.66亿",
-      "turnover": null,
-      "amplitude": 0.0,
-      "speed": 0.0,
+      "code": "300750",
+      "name": "宁德时代",
+      "score": 78,
+      "price": "-",
+      "change_pct": "-",
+      "amount": "-",
+      "turnover": "-",
+      "amplitude": "-",
+      "speed": "-",
       "signal_tags": [
-        "接近涨停",
-        "成交额10亿+"
+        "演示数据"
       ],
-      "reason": "涨跌幅 10.0%；成交额约 147.66亿；换手率 -%。综合动量、成交额、换手率、涨速和活跃度排序，数据源：东方财富A股行情。"
+      "reason": "演示数据：stock_zh_a_spot: ('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer')); stock_zh_a_spot_tx: module 'akshare' has no attribute 'stock_zh_a_spot_tx'"
     },
     {
       "rank": 6,
-      "code": "sz002179",
-      "name": "中航光电",
-      "score": 79.61,
-      "price": 40.61,
-      "change_pct": 9.99,
-      "amount": "44.29亿",
-      "turnover": null,
-      "amplitude": 0.0,
-      "speed": 0.0,
+      "code": "603019",
+      "name": "中科曙光",
+      "score": 77,
+      "price": "-",
+      "change_pct": "-",
+      "amount": "-",
+      "turnover": "-",
+      "amplitude": "-",
+      "speed": "-",
       "signal_tags": [
-        "接近涨停",
-        "成交额10亿+"
+        "演示数据"
       ],
-      "reason": "涨跌幅 9.99%；成交额约 44.29亿；换手率 -%。综合动量、成交额、换手率、涨速和活跃度排序，数据源：东方财富A股行情。"
+      "reason": "演示数据：stock_zh_a_spot: ('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer')); stock_zh_a_spot_tx: module 'akshare' has no attribute 'stock_zh_a_spot_tx'"
     },
     {
       "rank": 7,
-      "code": "sz000425",
-      "name": "徐工机械",
-      "score": 79.43,
-      "price": 10.97,
-      "change_pct": 10.03,
-      "amount": "24.70亿",
-      "turnover": null,
-      "amplitude": 0.0,
-      "speed": 0.0,
+      "code": "688981",
+      "name": "中芯国际",
+      "score": 75,
+      "price": "-",
+      "change_pct": "-",
+      "amount": "-",
+      "turnover": "-",
+      "amplitude": "-",
+      "speed": "-",
       "signal_tags": [
-        "接近涨停",
-        "成交额10亿+"
+        "演示数据"
       ],
-      "reason": "涨跌幅 10.03%；成交额约 24.70亿；换手率 -%。综合动量、成交额、换手率、涨速和活跃度排序，数据源：东方财富A股行情。"
+      "reason": "演示数据：stock_zh_a_spot: ('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer')); stock_zh_a_spot_tx: module 'akshare' has no attribute 'stock_zh_a_spot_tx'"
     },
     {
       "rank": 8,
-      "code": "sz002008",
-      "name": "大族激光",
-      "score": 79.28,
-      "price": 134.27,
-      "change_pct": 10.0,
-      "amount": "87.36亿",
-      "turnover": null,
-      "amplitude": 0.0,
-      "speed": 0.0,
+      "code": "300124",
+      "name": "汇川技术",
+      "score": 74,
+      "price": "-",
+      "change_pct": "-",
+      "amount": "-",
+      "turnover": "-",
+      "amplitude": "-",
+      "speed": "-",
       "signal_tags": [
-        "接近涨停",
-        "成交额10亿+"
+        "演示数据"
       ],
-      "reason": "涨跌幅 10.0%；成交额约 87.36亿；换手率 -%。综合动量、成交额、换手率、涨速和活跃度排序，数据源：东方财富A股行情。"
+      "reason": "演示数据：stock_zh_a_spot: ('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer')); stock_zh_a_spot_tx: module 'akshare' has no attribute 'stock_zh_a_spot_tx'"
     },
     {
       "rank": 9,
-      "code": "sh601727",
-      "name": "上海电气",
-      "score": 79.11,
-      "price": 8.9,
-      "change_pct": 9.47,
-      "amount": "67.64亿",
-      "turnover": null,
-      "amplitude": 0.0,
-      "speed": 0.0,
+      "code": "600941",
+      "name": "中国移动",
+      "score": 72,
+      "price": "-",
+      "change_pct": "-",
+      "amount": "-",
+      "turnover": "-",
+      "amplitude": "-",
+      "speed": "-",
       "signal_tags": [
-        "接近涨停",
-        "成交额10亿+"
+        "演示数据"
       ],
-      "reason": "涨跌幅 9.47%；成交额约 67.64亿；换手率 -%。综合动量、成交额、换手率、涨速和活跃度排序，数据源：东方财富A股行情。"
+      "reason": "演示数据：stock_zh_a_spot: ('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer')); stock_zh_a_spot_tx: module 'akshare' has no attribute 'stock_zh_a_spot_tx'"
     },
     {
       "rank": 10,
-      "code": "sz000062",
-      "name": "深圳华强",
-      "score": 78.89,
-      "price": 39.09,
-      "change_pct": 9.99,
-      "amount": "32.83亿",
-      "turnover": null,
-      "amplitude": 0.0,
-      "speed": 0.0,
+      "code": "002415",
+      "name": "海康威视",
+      "score": 71,
+      "price": "-",
+      "change_pct": "-",
+      "amount": "-",
+      "turnover": "-",
+      "amplitude": "-",
+      "speed": "-",
       "signal_tags": [
-        "接近涨停",
-        "成交额10亿+"
+        "演示数据"
       ],
-      "reason": "涨跌幅 9.99%；成交额约 32.83亿；换手率 -%。综合动量、成交额、换手率、涨速和活跃度排序，数据源：东方财富A股行情。"
+      "reason": "演示数据：stock_zh_a_spot: ('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer')); stock_zh_a_spot_tx: module 'akshare' has no attribute 'stock_zh_a_spot_tx'"
     }
   ]
 }
