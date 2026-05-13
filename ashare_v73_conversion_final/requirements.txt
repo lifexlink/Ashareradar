@@ -1,0 +1,6 @@
+Flask==3.0.3
+gunicorn==22.0.0
+Werkzeug==3.0.3
+
+akshare>=1.18.56
+pandas>=2.0.0

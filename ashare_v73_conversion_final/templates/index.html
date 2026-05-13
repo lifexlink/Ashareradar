@@ -1,0 +1,123 @@
+{% extends "layout.html" %}{% block body %}
+
+<section class="hero conversion-hero">
+  <div>
+    <div class="tag">懒人短线观察工具 · 非荐股</div>
+    <h1>每天自动筛出A股强势候选池</h1>
+    <p>
+      不用自己翻几千只股票。系统自动根据实时行情、涨跌幅、成交额、换手率和活跃度，
+      给你一个更省时间的市场观察入口。
+    </p>
+
+    <div class="cta-row">
+      {% if session.get('user') %}
+      <a class="btn primary big-btn" href="{{ url_for('dashboard') }}">立即查看今日Top3</a>
+      {% else %}
+      <a class="btn primary big-btn" href="{{ url_for('register') }}">免费注册查看Top3</a>
+      {% endif %}
+      <a class="btn" href="{{ url_for('backtest') }}">查看历史表现</a>
+      <a class="btn" href="{{ url_for('pricing') }}">解锁完整Top10</a>
+    </div>
+
+    <p class="muted" style="margin-top:14px;">
+      免费账号可看 Top3；周卡 ¥39 解锁完整 Top10、历史表现和每日复盘。
+    </p>
+  </div>
+
+  <div class="card hero-proof">
+    <div class="kpi">最近表现</div>
+    {% if latest_summary %}
+      <h3>最近Top3平均：{{ latest_summary.top3_avg if latest_summary.top3_avg is not none else '-' }}%</h3>
+      <p class="muted">最近Top10平均：{{ latest_summary.top10_avg if latest_summary.top10_avg is not none else '-' }}% · 接近涨停：{{ latest_summary.limit_up }}只</p>
+    {% else %}
+      <h3>等待首次更新</h3>
+      <p class="muted">运行 GitHub Actions 后自动生成历史表现。</p>
+    {% endif %}
+    <div class="mini-stats">
+      <div><strong>{{ public_stats.users if public_stats else 0 }}</strong><span>注册用户</span></div>
+      <div><strong>{{ public_stats.approved_orders if public_stats else 0 }}</strong><span>已开通订单</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="grid three">
+  <div class="card">
+    <h3>1. 免费看Top3</h3>
+    <p>先不付费，直接看今日前三只候选股，判断工具是否适合你。</p>
+    <a class="btn primary" href="{{ url_for('register') }}">免费开始</a>
+  </div>
+
+  <div class="card highlight-card">
+    <div class="tag">推荐先体验</div>
+    <h3>2. 解锁完整Top10</h3>
+    <p>如果你每天都看盘，周卡 ¥39 可以看到完整榜单、标签和复盘。</p>
+    <a class="btn primary" href="{{ url_for('pricing') }}">查看套餐</a>
+  </div>
+
+  <div class="card">
+    <h3>3. 每天少翻列表</h3>
+    <p>适合盘前/盘中快速观察热点，不用在行情软件里反复筛选。</p>
+    <a class="btn" href="{{ url_for('methodology') }}">看算法说明</a>
+  </div>
+</section>
+
+<section class="grid two" style="margin-top:22px;">
+  <div class="card">
+    <h2>这个工具解决什么问题？</h2>
+    <ul class="clean">
+      <li>每天快速看市场最活跃的一批股票</li>
+      <li>减少手动翻列表、翻涨幅榜的时间</li>
+      <li>用历史表现和每日复盘建立观察习惯</li>
+      <li>只做数据筛选，不做买卖建议</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>近3次历史摘要</h2>
+    <table>
+      <thead><tr><th>日期</th><th>Top3均值</th><th>Top10均值</th><th>接近涨停</th></tr></thead>
+      <tbody>
+      {% for r in last3 %}
+        <tr><td>{{ r.date }}</td><td>{{ r.top3_avg if r.top3_avg is not none else '-' }}%</td><td>{{ r.top10_avg if r.top10_avg is not none else '-' }}%</td><td>{{ r.limit_up }}</td></tr>
+      {% else %}
+        <tr><td colspan="4">暂无历史记录</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="grid two" style="margin-top:22px;">
+  <div class="card">
+    <h2>用户反馈</h2>
+    {% if feedback_items %}
+      {% for f in feedback_items %}
+      <div class="quote">“{{ f.content }}”<br><span class="muted">— {{ f.nickname or f.username or '用户' }}</span></div>
+      {% endfor %}
+    {% else %}
+      <div class="quote">“适合每天快速看热点，少翻很多列表。”<br><span class="muted">— 内测用户</span></div>
+      <div class="quote">“不是让我直接买，而是帮我节省观察时间。”<br><span class="muted">— 短线观察者</span></div>
+    {% endif %}
+  </div>
+
+  <div class="card">
+    <h2>重要边界</h2>
+    <p class="muted">
+      本系统不是荐股软件，不保证涨停，不承诺收益。所有内容仅用于市场观察、热点跟踪和交易辅助参考。
+      投资有风险，请独立判断并控制仓位。
+    </p>
+    <a class="btn" href="{{ url_for('disclaimer') }}">查看免责声明</a>
+  </div>
+</section>
+
+<section class="card final-cta">
+  <h2>先免费试一下，再决定是否开通</h2>
+  <p class="muted">免费查看 Top3。如果觉得它能帮你节省时间，再开通完整 Top10。</p>
+  {% if session.get('user') %}
+  <a class="btn primary big-btn" href="{{ url_for('dashboard') }}">查看今日Top3</a>
+  {% else %}
+  <a class="btn primary big-btn" href="{{ url_for('register') }}">免费注册查看Top3</a>
+  {% endif %}
+</section>
+
+{% endblock %}
