@@ -1,177 +1,167 @@
 {
   "date": "2026-05-18",
-  "generated_at": "2026-05-18 16:50:07",
-  "source": "live-stock_zh_a_spot",
+  "generated_at": "2026-05-18 19:07:02",
+  "source": "fallback-demo",
   "signals": [
     {
       "rank": 1,
-      "code": "sh603601",
-      "name": "再升科技",
-      "score": 80.38,
-      "price": 18.56,
-      "change_pct": 10.02,
-      "amount": "39.03亿",
-      "turnover": null,
-      "amplitude": 0.0,
-      "speed": 0.0,
+      "code": "300308",
+      "name": "中际旭创",
+      "score": 88,
+      "price": "-",
+      "change_pct": "-",
+      "amount": "-",
+      "turnover": "-",
+      "amplitude": "-",
+      "speed": "-",
       "signal_tags": [
-        "接近涨停",
-        "成交额10亿+"
+        "演示数据"
       ],
-      "reason": "涨跌幅 10.02%；成交额约 39.03亿；换手率 -%。综合动量、成交额、换手率、涨速和活跃度排序，数据源：东方财富A股行情。"
+      "reason": "演示数据：stock_zh_a_spot: Can not decode value starting with character '<'; stock_zh_a_spot_tx: module 'akshare' has no attribute 'stock_zh_a_spot_tx'"
     },
     {
       "rank": 2,
-      "code": "sh600183",
-      "name": "生益科技",
-      "score": 79.82,
-      "price": 98.95,
-      "change_pct": 10.01,
-      "amount": "72.71亿",
-      "turnover": null,
-      "amplitude": 0.0,
-      "speed": 0.0,
+      "code": "002230",
+      "name": "科大讯飞",
+      "score": 84,
+      "price": "-",
+      "change_pct": "-",
+      "amount": "-",
+      "turnover": "-",
+      "amplitude": "-",
+      "speed": "-",
       "signal_tags": [
-        "接近涨停",
-        "成交额10亿+"
+        "演示数据"
       ],
-      "reason": "涨跌幅 10.01%；成交额约 72.71亿；换手率 -%。综合动量、成交额、换手率、涨速和活跃度排序，数据源：东方财富A股行情。"
+      "reason": "演示数据：stock_zh_a_spot: Can not decode value starting with character '<'; stock_zh_a_spot_tx: module 'akshare' has no attribute 'stock_zh_a_spot_tx'"
     },
     {
       "rank": 3,
-      "code": "sz000988",
-      "name": "华工科技",
-      "score": 79.71,
-      "price": 147.38,
-      "change_pct": 10.0,
-      "amount": "97.79亿",
-      "turnover": null,
-      "amplitude": 0.0,
-      "speed": 0.0,
+      "code": "601138",
+      "name": "工业富联",
+      "score": 82,
+      "price": "-",
+      "change_pct": "-",
+      "amount": "-",
+      "turnover": "-",
+      "amplitude": "-",
+      "speed": "-",
       "signal_tags": [
-        "接近涨停",
-        "成交额10亿+"
+        "演示数据"
       ],
-      "reason": "涨跌幅 10.0%；成交额约 97.79亿；换手率 -%。综合动量、成交额、换手率、涨速和活跃度排序，数据源：东方财富A股行情。"
+      "reason": "演示数据：stock_zh_a_spot: Can not decode value starting with character '<'; stock_zh_a_spot_tx: module 'akshare' has no attribute 'stock_zh_a_spot_tx'"
     },
     {
       "rank": 4,
-      "code": "sz000021",
-      "name": "深科技",
-      "score": 79.66,
-      "price": 37.03,
-      "change_pct": 10.01,
-      "amount": "34.56亿",
-      "turnover": null,
-      "amplitude": 0.0,
-      "speed": 0.0,
+      "code": "002371",
+      "name": "北方华创",
+      "score": 80,
+      "price": "-",
+      "change_pct": "-",
+      "amount": "-",
+      "turnover": "-",
+      "amplitude": "-",
+      "speed": "-",
       "signal_tags": [
-        "接近涨停",
-        "成交额10亿+"
+        "演示数据"
       ],
-      "reason": "涨跌幅 10.01%；成交额约 34.56亿；换手率 -%。综合动量、成交额、换手率、涨速和活跃度排序，数据源：东方财富A股行情。"
+      "reason": "演示数据：stock_zh_a_spot: Can not decode value starting with character '<'; stock_zh_a_spot_tx: module 'akshare' has no attribute 'stock_zh_a_spot_tx'"
     },
     {
       "rank": 5,
-      "code": "sh600909",
-      "name": "华安证券",
-      "score": 79.37,
-      "price": 6.28,
-      "change_pct": 9.98,
-      "amount": "19.38亿",
-      "turnover": null,
-      "amplitude": 0.0,
-      "speed": 0.0,
+      "code": "300750",
+      "name": "宁德时代",
+      "score": 78,
+      "price": "-",
+      "change_pct": "-",
+      "amount": "-",
+      "turnover": "-",
+      "amplitude": "-",
+      "speed": "-",
       "signal_tags": [
-        "接近涨停",
-        "成交额10亿+"
+        "演示数据"
       ],
-      "reason": "涨跌幅 9.98%；成交额约 19.38亿；换手率 -%。综合动量、成交额、换手率、涨速和活跃度排序，数据源：东方财富A股行情。"
+      "reason": "演示数据：stock_zh_a_spot: Can not decode value starting with character '<'; stock_zh_a_spot_tx: module 'akshare' has no attribute 'stock_zh_a_spot_tx'"
     },
     {
       "rank": 6,
-      "code": "sh600578",
-      "name": "京能电力",
-      "score": 79.2,
-      "price": 7.71,
-      "change_pct": 9.99,
-      "amount": "18.38亿",
-      "turnover": null,
-      "amplitude": 0.0,
-      "speed": 0.0,
+      "code": "603019",
+      "name": "中科曙光",
+      "score": 77,
+      "price": "-",
+      "change_pct": "-",
+      "amount": "-",
+      "turnover": "-",
+      "amplitude": "-",
+      "speed": "-",
       "signal_tags": [
-        "接近涨停",
-        "成交额10亿+"
+        "演示数据"
       ],
-      "reason": "涨跌幅 9.99%；成交额约 18.38亿；换手率 -%。综合动量、成交额、换手率、涨速和活跃度排序，数据源：东方财富A股行情。"
+      "reason": "演示数据：stock_zh_a_spot: Can not decode value starting with character '<'; stock_zh_a_spot_tx: module 'akshare' has no attribute 'stock_zh_a_spot_tx'"
     },
     {
       "rank": 7,
-      "code": "sh601678",
-      "name": "滨化股份",
-      "score": 79.13,
-      "price": 6.39,
-      "change_pct": 9.98,
-      "amount": "17.67亿",
-      "turnover": null,
-      "amplitude": 0.0,
-      "speed": 0.0,
+      "code": "688981",
+      "name": "中芯国际",
+      "score": 75,
+      "price": "-",
+      "change_pct": "-",
+      "amount": "-",
+      "turnover": "-",
+      "amplitude": "-",
+      "speed": "-",
       "signal_tags": [
-        "接近涨停",
-        "成交额10亿+"
+        "演示数据"
       ],
-      "reason": "涨跌幅 9.98%；成交额约 17.67亿；换手率 -%。综合动量、成交额、换手率、涨速和活跃度排序，数据源：东方财富A股行情。"
+      "reason": "演示数据：stock_zh_a_spot: Can not decode value starting with character '<'; stock_zh_a_spot_tx: module 'akshare' has no attribute 'stock_zh_a_spot_tx'"
     },
     {
       "rank": 8,
-      "code": "sz002654",
-      "name": "万润科技",
-      "score": 78.85,
-      "price": 18.23,
-      "change_pct": 10.02,
-      "amount": "18.69亿",
-      "turnover": null,
-      "amplitude": 0.0,
-      "speed": 0.0,
+      "code": "300124",
+      "name": "汇川技术",
+      "score": 74,
+      "price": "-",
+      "change_pct": "-",
+      "amount": "-",
+      "turnover": "-",
+      "amplitude": "-",
+      "speed": "-",
       "signal_tags": [
-        "接近涨停",
-        "成交额10亿+"
+        "演示数据"
       ],
-      "reason": "涨跌幅 10.02%；成交额约 18.69亿；换手率 -%。综合动量、成交额、换手率、涨速和活跃度排序，数据源：东方财富A股行情。"
+      "reason": "演示数据：stock_zh_a_spot: Can not decode value starting with character '<'; stock_zh_a_spot_tx: module 'akshare' has no attribute 'stock_zh_a_spot_tx'"
     },
     {
       "rank": 9,
-      "code": "sz002354",
-      "name": "天娱数科",
-      "score": 78.67,
-      "price": 7.08,
-      "change_pct": 9.94,
-      "amount": "15.73亿",
-      "turnover": null,
-      "amplitude": 0.0,
-      "speed": 0.0,
+      "code": "600941",
+      "name": "中国移动",
+      "score": 72,
+      "price": "-",
+      "change_pct": "-",
+      "amount": "-",
+      "turnover": "-",
+      "amplitude": "-",
+      "speed": "-",
       "signal_tags": [
-        "接近涨停",
-        "成交额10亿+"
+        "演示数据"
       ],
-      "reason": "涨跌幅 9.94%；成交额约 15.73亿；换手率 -%。综合动量、成交额、换手率、涨速和活跃度排序，数据源：东方财富A股行情。"
+      "reason": "演示数据：stock_zh_a_spot: Can not decode value starting with character '<'; stock_zh_a_spot_tx: module 'akshare' has no attribute 'stock_zh_a_spot_tx'"
     },
     {
       "rank": 10,
-      "code": "sz002484",
-      "name": "江海股份",
-      "score": 78.39,
-      "price": 53.35,
-      "change_pct": 9.64,
-      "amount": "38.69亿",
-      "turnover": null,
-      "amplitude": 0.0,
-      "speed": 0.0,
+      "code": "002415",
+      "name": "海康威视",
+      "score": 71,
+      "price": "-",
+      "change_pct": "-",
+      "amount": "-",
+      "turnover": "-",
+      "amplitude": "-",
+      "speed": "-",
       "signal_tags": [
-        "接近涨停",
-        "成交额10亿+"
+        "演示数据"
       ],
-      "reason": "涨跌幅 9.64%；成交额约 38.69亿；换手率 -%。综合动量、成交额、换手率、涨速和活跃度排序，数据源：东方财富A股行情。"
+      "reason": "演示数据：stock_zh_a_spot: Can not decode value starting with character '<'; stock_zh_a_spot_tx: module 'akshare' has no attribute 'stock_zh_a_spot_tx'"
     }
   ]
 }
