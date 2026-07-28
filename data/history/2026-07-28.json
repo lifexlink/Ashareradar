@@ -1,167 +1,177 @@
 {
   "date": "2026-07-28",
-  "generated_at": "2026-07-28 15:47:49",
-  "source": "fallback-demo",
+  "generated_at": "2026-07-28 17:34:23",
+  "source": "live-stock_zh_a_spot",
   "signals": [
     {
       "rank": 1,
-      "code": "300308",
-      "name": "中际旭创",
-      "score": 88,
-      "price": "-",
-      "change_pct": "-",
-      "amount": "-",
-      "turnover": "-",
-      "amplitude": "-",
-      "speed": "-",
+      "code": "sz000533",
+      "name": "顺钠股份",
+      "score": 80.1,
+      "price": 11.56,
+      "change_pct": 9.99,
+      "amount": "21.48亿",
+      "turnover": null,
+      "amplitude": 0.0,
+      "speed": 0.0,
       "signal_tags": [
-        "演示数据"
+        "接近涨停",
+        "成交额10亿+"
       ],
-      "reason": "演示数据：filtered empty"
+      "reason": "涨跌幅 9.99%；成交额约 21.48亿；换手率 -%。综合动量、成交额、换手率、涨速和活跃度排序，数据源：东方财富A股行情。"
     },
     {
       "rank": 2,
-      "code": "002230",
-      "name": "科大讯飞",
-      "score": 84,
-      "price": "-",
-      "change_pct": "-",
-      "amount": "-",
-      "turnover": "-",
-      "amplitude": "-",
-      "speed": "-",
+      "code": "sz002195",
+      "name": "岩山科技",
+      "score": 79.77,
+      "price": 6.83,
+      "change_pct": 9.98,
+      "amount": "15.71亿",
+      "turnover": null,
+      "amplitude": 0.0,
+      "speed": 0.0,
       "signal_tags": [
-        "演示数据"
+        "接近涨停",
+        "成交额10亿+"
       ],
-      "reason": "演示数据：filtered empty"
+      "reason": "涨跌幅 9.98%；成交额约 15.71亿；换手率 -%。综合动量、成交额、换手率、涨速和活跃度排序，数据源：东方财富A股行情。"
     },
     {
       "rank": 3,
-      "code": "601138",
-      "name": "工业富联",
-      "score": 82,
-      "price": "-",
-      "change_pct": "-",
-      "amount": "-",
-      "turnover": "-",
-      "amplitude": "-",
-      "speed": "-",
+      "code": "sz002310",
+      "name": "东方新能",
+      "score": 79.19,
+      "price": 2.65,
+      "change_pct": 9.96,
+      "amount": "10.64亿",
+      "turnover": null,
+      "amplitude": 0.0,
+      "speed": 0.0,
       "signal_tags": [
-        "演示数据"
+        "接近涨停",
+        "成交额10亿+"
       ],
-      "reason": "演示数据：filtered empty"
+      "reason": "涨跌幅 9.96%；成交额约 10.64亿；换手率 -%。综合动量、成交额、换手率、涨速和活跃度排序，数据源：东方财富A股行情。"
     },
     {
       "rank": 4,
-      "code": "002371",
-      "name": "北方华创",
-      "score": 80,
-      "price": "-",
-      "change_pct": "-",
-      "amount": "-",
-      "turnover": "-",
-      "amplitude": "-",
-      "speed": "-",
+      "code": "sz000779",
+      "name": "甘咨询",
+      "score": 78.39,
+      "price": 11.67,
+      "change_pct": 9.99,
+      "amount": "9.13亿",
+      "turnover": null,
+      "amplitude": 0.0,
+      "speed": 0.0,
       "signal_tags": [
-        "演示数据"
+        "接近涨停",
+        "成交活跃"
       ],
-      "reason": "演示数据：filtered empty"
+      "reason": "涨跌幅 9.99%；成交额约 9.13亿；换手率 -%。综合动量、成交额、换手率、涨速和活跃度排序，数据源：东方财富A股行情。"
     },
     {
       "rank": 5,
-      "code": "300750",
-      "name": "宁德时代",
-      "score": 78,
-      "price": "-",
-      "change_pct": "-",
-      "amount": "-",
-      "turnover": "-",
-      "amplitude": "-",
-      "speed": "-",
+      "code": "sz300369",
+      "name": "绿盟科技",
+      "score": 77.72,
+      "price": 6.92,
+      "change_pct": 9.84,
+      "amount": "7.46亿",
+      "turnover": null,
+      "amplitude": 0.0,
+      "speed": 0.0,
       "signal_tags": [
-        "演示数据"
+        "接近涨停",
+        "成交活跃"
       ],
-      "reason": "演示数据：filtered empty"
+      "reason": "涨跌幅 9.84%；成交额约 7.46亿；换手率 -%。综合动量、成交额、换手率、涨速和活跃度排序，数据源：东方财富A股行情。"
     },
     {
       "rank": 6,
-      "code": "603019",
-      "name": "中科曙光",
-      "score": 77,
-      "price": "-",
-      "change_pct": "-",
-      "amount": "-",
-      "turnover": "-",
-      "amplitude": "-",
-      "speed": "-",
+      "code": "sz002388",
+      "name": "新亚制程",
+      "score": 77.35,
+      "price": 5.28,
+      "change_pct": 10.0,
+      "amount": "5.69亿",
+      "turnover": null,
+      "amplitude": 0.0,
+      "speed": 0.0,
       "signal_tags": [
-        "演示数据"
+        "接近涨停",
+        "成交活跃"
       ],
-      "reason": "演示数据：filtered empty"
+      "reason": "涨跌幅 10.0%；成交额约 5.69亿；换手率 -%。综合动量、成交额、换手率、涨速和活跃度排序，数据源：东方财富A股行情。"
     },
     {
       "rank": 7,
-      "code": "688981",
-      "name": "中芯国际",
-      "score": 75,
-      "price": "-",
-      "change_pct": "-",
-      "amount": "-",
-      "turnover": "-",
-      "amplitude": "-",
-      "speed": "-",
+      "code": "sz002173",
+      "name": "创新医疗",
+      "score": 77.01,
+      "price": 22.76,
+      "change_pct": 10.01,
+      "amount": "8.44亿",
+      "turnover": null,
+      "amplitude": 0.0,
+      "speed": 0.0,
       "signal_tags": [
-        "演示数据"
+        "接近涨停",
+        "成交活跃"
       ],
-      "reason": "演示数据：filtered empty"
+      "reason": "涨跌幅 10.01%；成交额约 8.44亿；换手率 -%。综合动量、成交额、换手率、涨速和活跃度排序，数据源：东方财富A股行情。"
     },
     {
       "rank": 8,
-      "code": "300124",
-      "name": "汇川技术",
-      "score": 74,
-      "price": "-",
-      "change_pct": "-",
-      "amount": "-",
-      "turnover": "-",
-      "amplitude": "-",
-      "speed": "-",
+      "code": "sh600775",
+      "name": "南京熊猫",
+      "score": 76.64,
+      "price": 10.35,
+      "change_pct": 9.99,
+      "amount": "5.74亿",
+      "turnover": null,
+      "amplitude": 0.0,
+      "speed": 0.0,
       "signal_tags": [
-        "演示数据"
+        "接近涨停",
+        "成交活跃"
       ],
-      "reason": "演示数据：filtered empty"
+      "reason": "涨跌幅 9.99%；成交额约 5.74亿；换手率 -%。综合动量、成交额、换手率、涨速和活跃度排序，数据源：东方财富A股行情。"
     },
     {
       "rank": 9,
-      "code": "600941",
-      "name": "中国移动",
-      "score": 72,
-      "price": "-",
-      "change_pct": "-",
-      "amount": "-",
-      "turnover": "-",
-      "amplitude": "-",
-      "speed": "-",
+      "code": "sh600756",
+      "name": "浪潮软件",
+      "score": 76.51,
+      "price": 15.39,
+      "change_pct": 10.01,
+      "amount": "6.33亿",
+      "turnover": null,
+      "amplitude": 0.0,
+      "speed": 0.0,
       "signal_tags": [
-        "演示数据"
+        "接近涨停",
+        "成交活跃"
       ],
-      "reason": "演示数据：filtered empty"
+      "reason": "涨跌幅 10.01%；成交额约 6.33亿；换手率 -%。综合动量、成交额、换手率、涨速和活跃度排序，数据源：东方财富A股行情。"
     },
     {
       "rank": 10,
-      "code": "002415",
-      "name": "海康威视",
-      "score": 71,
-      "price": "-",
-      "change_pct": "-",
-      "amount": "-",
-      "turnover": "-",
-      "amplitude": "-",
-      "speed": "-",
+      "code": "sz000566",
+      "name": "海南海药",
+      "score": 76.32,
+      "price": 5.83,
+      "change_pct": 10.0,
+      "amount": "4.64亿",
+      "turnover": null,
+      "amplitude": 0.0,
+      "speed": 0.0,
       "signal_tags": [
-        "演示数据"
+        "接近涨停",
+        "成交活跃"
       ],
-      "reason": "演示数据：filtered empty"
+      "reason": "涨跌幅 10.0%；成交额约 4.64亿；换手率 -%。综合动量、成交额、换手率、涨速和活跃度排序，数据源：东方财富A股行情。"
     }
   ]
 }
