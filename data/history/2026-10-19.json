@@ -1,0 +1,167 @@
+{
+  "date": "2026-10-19",
+  "generated_at": "2026-10-19 13:51:14",
+  "source": "fallback-demo",
+  "signals": [
+    {
+      "rank": 1,
+      "code": "300308",
+      "name": "中际旭创",
+      "score": 88,
+      "price": "-",
+      "change_pct": "-",
+      "amount": "-",
+      "turnover": "-",
+      "amplitude": "-",
+      "speed": "-",
+      "signal_tags": [
+        "演示数据"
+      ],
+      "reason": "演示数据：filtered empty"
+    },
+    {
+      "rank": 2,
+      "code": "002230",
+      "name": "科大讯飞",
+      "score": 84,
+      "price": "-",
+      "change_pct": "-",
+      "amount": "-",
+      "turnover": "-",
+      "amplitude": "-",
+      "speed": "-",
+      "signal_tags": [
+        "演示数据"
+      ],
+      "reason": "演示数据：filtered empty"
+    },
+    {
+      "rank": 3,
+      "code": "601138",
+      "name": "工业富联",
+      "score": 82,
+      "price": "-",
+      "change_pct": "-",
+      "amount": "-",
+      "turnover": "-",
+      "amplitude": "-",
+      "speed": "-",
+      "signal_tags": [
+        "演示数据"
+      ],
+      "reason": "演示数据：filtered empty"
+    },
+    {
+      "rank": 4,
+      "code": "002371",
+      "name": "北方华创",
+      "score": 80,
+      "price": "-",
+      "change_pct": "-",
+      "amount": "-",
+      "turnover": "-",
+      "amplitude": "-",
+      "speed": "-",
+      "signal_tags": [
+        "演示数据"
+      ],
+      "reason": "演示数据：filtered empty"
+    },
+    {
+      "rank": 5,
+      "code": "300750",
+      "name": "宁德时代",
+      "score": 78,
+      "price": "-",
+      "change_pct": "-",
+      "amount": "-",
+      "turnover": "-",
+      "amplitude": "-",
+      "speed": "-",
+      "signal_tags": [
+        "演示数据"
+      ],
+      "reason": "演示数据：filtered empty"
+    },
+    {
+      "rank": 6,
+      "code": "603019",
+      "name": "中科曙光",
+      "score": 77,
+      "price": "-",
+      "change_pct": "-",
+      "amount": "-",
+      "turnover": "-",
+      "amplitude": "-",
+      "speed": "-",
+      "signal_tags": [
+        "演示数据"
+      ],
+      "reason": "演示数据：filtered empty"
+    },
+    {
+      "rank": 7,
+      "code": "688981",
+      "name": "中芯国际",
+      "score": 75,
+      "price": "-",
+      "change_pct": "-",
+      "amount": "-",
+      "turnover": "-",
+      "amplitude": "-",
+      "speed": "-",
+      "signal_tags": [
+        "演示数据"
+      ],
+      "reason": "演示数据：filtered empty"
+    },
+    {
+      "rank": 8,
+      "code": "300124",
+      "name": "汇川技术",
+      "score": 74,
+      "price": "-",
+      "change_pct": "-",
+      "amount": "-",
+      "turnover": "-",
+      "amplitude": "-",
+      "speed": "-",
+      "signal_tags": [
+        "演示数据"
+      ],
+      "reason": "演示数据：filtered empty"
+    },
+    {
+      "rank": 9,
+      "code": "600941",
+      "name": "中国移动",
+      "score": 72,
+      "price": "-",
+      "change_pct": "-",
+      "amount": "-",
+      "turnover": "-",
+      "amplitude": "-",
+      "speed": "-",
+      "signal_tags": [
+        "演示数据"
+      ],
+      "reason": "演示数据：filtered empty"
+    },
+    {
+      "rank": 10,
+      "code": "002415",
+      "name": "海康威视",
+      "score": 71,
+      "price": "-",
+      "change_pct": "-",
+      "amount": "-",
+      "turnover": "-",
+      "amplitude": "-",
+      "speed": "-",
+      "signal_tags": [
+        "演示数据"
+      ],
+      "reason": "演示数据：filtered empty"
+    }
+  ]
+}
