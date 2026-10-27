@@ -1,0 +1,177 @@
+{
+  "date": "2026-10-27",
+  "generated_at": "2026-10-27 14:03:21",
+  "source": "live-stock_zh_a_spot",
+  "signals": [
+    {
+      "rank": 1,
+      "code": "sz002249",
+      "name": "大洋电机",
+      "score": 80.17,
+      "price": 7.7,
+      "change_pct": 10.0,
+      "amount": "11.71亿",
+      "turnover": null,
+      "amplitude": 0.0,
+      "speed": 0.0,
+      "signal_tags": [
+        "接近涨停",
+        "成交额10亿+"
+      ],
+      "reason": "涨跌幅 10.0%；成交额约 11.71亿；换手率 -%。综合动量、成交额、换手率、涨速和活跃度排序，数据源：东方财富A股行情。"
+    },
+    {
+      "rank": 2,
+      "code": "sz002724",
+      "name": "海洋王",
+      "score": 80.09,
+      "price": 13.07,
+      "change_pct": 9.83,
+      "amount": "19.01亿",
+      "turnover": null,
+      "amplitude": 0.0,
+      "speed": 0.0,
+      "signal_tags": [
+        "接近涨停",
+        "成交额10亿+"
+      ],
+      "reason": "涨跌幅 9.83%；成交额约 19.01亿；换手率 -%。综合动量、成交额、换手率、涨速和活跃度排序，数据源：东方财富A股行情。"
+    },
+    {
+      "rank": 3,
+      "code": "sz000678",
+      "name": "襄阳轴承",
+      "score": 79.95,
+      "price": 16.01,
+      "change_pct": 10.03,
+      "amount": "11.56亿",
+      "turnover": null,
+      "amplitude": 0.0,
+      "speed": 0.0,
+      "signal_tags": [
+        "接近涨停",
+        "成交额10亿+"
+      ],
+      "reason": "涨跌幅 10.03%；成交额约 11.56亿；换手率 -%。综合动量、成交额、换手率、涨速和活跃度排序，数据源：东方财富A股行情。"
+    },
+    {
+      "rank": 4,
+      "code": "sz002196",
+      "name": "方正电机",
+      "score": 79.57,
+      "price": 11.07,
+      "change_pct": 10.04,
+      "amount": "8.52亿",
+      "turnover": null,
+      "amplitude": 0.0,
+      "speed": 0.0,
+      "signal_tags": [
+        "接近涨停",
+        "成交活跃"
+      ],
+      "reason": "涨跌幅 10.04%；成交额约 8.52亿；换手率 -%。综合动量、成交额、换手率、涨速和活跃度排序，数据源：东方财富A股行情。"
+    },
+    {
+      "rank": 5,
+      "code": "sz300307",
+      "name": "慈星股份",
+      "score": 79.55,
+      "price": 10.28,
+      "change_pct": 9.71,
+      "amount": "15.16亿",
+      "turnover": null,
+      "amplitude": 0.0,
+      "speed": 0.0,
+      "signal_tags": [
+        "接近涨停",
+        "成交额10亿+"
+      ],
+      "reason": "涨跌幅 9.71%；成交额约 15.16亿；换手率 -%。综合动量、成交额、换手率、涨速和活跃度排序，数据源：东方财富A股行情。"
+    },
+    {
+      "rank": 6,
+      "code": "sz002086",
+      "name": "东方海洋",
+      "score": 78.13,
+      "price": 2.53,
+      "change_pct": 10.0,
+      "amount": "4.20亿",
+      "turnover": null,
+      "amplitude": 0.0,
+      "speed": 0.0,
+      "signal_tags": [
+        "接近涨停",
+        "成交活跃"
+      ],
+      "reason": "涨跌幅 10.0%；成交额约 4.20亿；换手率 -%。综合动量、成交额、换手率、涨速和活跃度排序，数据源：东方财富A股行情。"
+    },
+    {
+      "rank": 7,
+      "code": "sz002093",
+      "name": "国脉科技",
+      "score": 78.05,
+      "price": 7.93,
+      "change_pct": 9.99,
+      "amount": "4.78亿",
+      "turnover": null,
+      "amplitude": 0.0,
+      "speed": 0.0,
+      "signal_tags": [
+        "接近涨停",
+        "成交活跃"
+      ],
+      "reason": "涨跌幅 9.99%；成交额约 4.78亿；换手率 -%。综合动量、成交额、换手率、涨速和活跃度排序，数据源：东方财富A股行情。"
+    },
+    {
+      "rank": 8,
+      "code": "sz000888",
+      "name": "峨眉山Ａ",
+      "score": 78.03,
+      "price": 10.1,
+      "change_pct": 10.02,
+      "amount": "4.87亿",
+      "turnover": null,
+      "amplitude": 0.0,
+      "speed": 0.0,
+      "signal_tags": [
+        "接近涨停",
+        "成交活跃"
+      ],
+      "reason": "涨跌幅 10.02%；成交额约 4.87亿；换手率 -%。综合动量、成交额、换手率、涨速和活跃度排序，数据源：东方财富A股行情。"
+    },
+    {
+      "rank": 9,
+      "code": "sz002929",
+      "name": "润建股份",
+      "score": 77.83,
+      "price": 56.96,
+      "change_pct": 10.0,
+      "amount": "11.41亿",
+      "turnover": null,
+      "amplitude": 0.0,
+      "speed": 0.0,
+      "signal_tags": [
+        "接近涨停",
+        "成交额10亿+"
+      ],
+      "reason": "涨跌幅 10.0%；成交额约 11.41亿；换手率 -%。综合动量、成交额、换手率、涨速和活跃度排序，数据源：东方财富A股行情。"
+    },
+    {
+      "rank": 10,
+      "code": "sz001318",
+      "name": "阳光乳业",
+      "score": 77.82,
+      "price": 13.31,
+      "change_pct": 10.0,
+      "amount": "5.08亿",
+      "turnover": null,
+      "amplitude": 0.0,
+      "speed": 0.0,
+      "signal_tags": [
+        "接近涨停",
+        "成交活跃"
+      ],
+      "reason": "涨跌幅 10.0%；成交额约 5.08亿；换手率 -%。综合动量、成交额、换手率、涨速和活跃度排序，数据源：东方财富A股行情。"
+    }
+  ]
+}
