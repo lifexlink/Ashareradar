@@ -1,0 +1,177 @@
+{
+  "date": "2026-10-30",
+  "generated_at": "2026-10-30 14:52:26",
+  "source": "live-stock_zh_a_spot",
+  "signals": [
+    {
+      "rank": 1,
+      "code": "sz002636",
+      "name": "金安国纪",
+      "score": 80.08,
+      "price": 63.68,
+      "change_pct": 10.0,
+      "amount": "39.72亿",
+      "turnover": null,
+      "amplitude": 0.0,
+      "speed": 0.0,
+      "signal_tags": [
+        "接近涨停",
+        "成交额10亿+"
+      ],
+      "reason": "涨跌幅 10.0%；成交额约 39.72亿；换手率 -%。综合动量、成交额、换手率、涨速和活跃度排序，数据源：东方财富A股行情。"
+    },
+    {
+      "rank": 2,
+      "code": "sz000568",
+      "name": "泸州老窖",
+      "score": 79.16,
+      "price": 77.07,
+      "change_pct": 10.01,
+      "amount": "30.71亿",
+      "turnover": null,
+      "amplitude": 0.0,
+      "speed": 0.0,
+      "signal_tags": [
+        "接近涨停",
+        "成交额10亿+"
+      ],
+      "reason": "涨跌幅 10.01%；成交额约 30.71亿；换手率 -%。综合动量、成交额、换手率、涨速和活跃度排序，数据源：东方财富A股行情。"
+    },
+    {
+      "rank": 3,
+      "code": "sh600721",
+      "name": "百花医药",
+      "score": 78.75,
+      "price": 9.83,
+      "change_pct": 9.96,
+      "amount": "9.03亿",
+      "turnover": null,
+      "amplitude": 0.0,
+      "speed": 0.0,
+      "signal_tags": [
+        "接近涨停",
+        "成交活跃"
+      ],
+      "reason": "涨跌幅 9.96%；成交额约 9.03亿；换手率 -%。综合动量、成交额、换手率、涨速和活跃度排序，数据源：东方财富A股行情。"
+    },
+    {
+      "rank": 4,
+      "code": "sh600258",
+      "name": "首旅酒店",
+      "score": 78.52,
+      "price": 12.43,
+      "change_pct": 10.0,
+      "amount": "8.70亿",
+      "turnover": null,
+      "amplitude": 0.0,
+      "speed": 0.0,
+      "signal_tags": [
+        "接近涨停",
+        "成交活跃"
+      ],
+      "reason": "涨跌幅 10.0%；成交额约 8.70亿；换手率 -%。综合动量、成交额、换手率、涨速和活跃度排序，数据源：东方财富A股行情。"
+    },
+    {
+      "rank": 5,
+      "code": "sh603278",
+      "name": "大业股份",
+      "score": 78.02,
+      "price": 19.54,
+      "change_pct": 9.28,
+      "amount": "20.59亿",
+      "turnover": null,
+      "amplitude": 0.0,
+      "speed": 0.0,
+      "signal_tags": [
+        "接近涨停",
+        "成交额10亿+"
+      ],
+      "reason": "涨跌幅 9.28%；成交额约 20.59亿；换手率 -%。综合动量、成交额、换手率、涨速和活跃度排序，数据源：东方财富A股行情。"
+    },
+    {
+      "rank": 6,
+      "code": "sz001219",
+      "name": "青岛食品",
+      "score": 78.0,
+      "price": 19.94,
+      "change_pct": 9.98,
+      "amount": "9.40亿",
+      "turnover": null,
+      "amplitude": 0.0,
+      "speed": 0.0,
+      "signal_tags": [
+        "接近涨停",
+        "成交活跃"
+      ],
+      "reason": "涨跌幅 9.98%；成交额约 9.40亿；换手率 -%。综合动量、成交额、换手率、涨速和活跃度排序，数据源：东方财富A股行情。"
+    },
+    {
+      "rank": 7,
+      "code": "sz000995",
+      "name": "皇台酒业",
+      "score": 77.54,
+      "price": 14.18,
+      "change_pct": 10.01,
+      "amount": "7.07亿",
+      "turnover": null,
+      "amplitude": 0.0,
+      "speed": 0.0,
+      "signal_tags": [
+        "接近涨停",
+        "成交活跃"
+      ],
+      "reason": "涨跌幅 10.01%；成交额约 7.07亿；换手率 -%。综合动量、成交额、换手率、涨速和活跃度排序，数据源：东方财富A股行情。"
+    },
+    {
+      "rank": 8,
+      "code": "sz002582",
+      "name": "好想你",
+      "score": 77.18,
+      "price": 9.93,
+      "change_pct": 9.97,
+      "amount": "5.94亿",
+      "turnover": null,
+      "amplitude": 0.0,
+      "speed": 0.0,
+      "signal_tags": [
+        "接近涨停",
+        "成交活跃"
+      ],
+      "reason": "涨跌幅 9.97%；成交额约 5.94亿；换手率 -%。综合动量、成交额、换手率、涨速和活跃度排序，数据源：东方财富A股行情。"
+    },
+    {
+      "rank": 9,
+      "code": "sz000676",
+      "name": "智度股份",
+      "score": 77.01,
+      "price": 6.61,
+      "change_pct": 9.98,
+      "amount": "5.11亿",
+      "turnover": null,
+      "amplitude": 0.0,
+      "speed": 0.0,
+      "signal_tags": [
+        "接近涨停",
+        "成交活跃"
+      ],
+      "reason": "涨跌幅 9.98%；成交额约 5.11亿；换手率 -%。综合动量、成交额、换手率、涨速和活跃度排序，数据源：东方财富A股行情。"
+    },
+    {
+      "rank": 10,
+      "code": "sh603200",
+      "name": "上海洗霸",
+      "score": 76.38,
+      "price": 51.72,
+      "change_pct": 10.0,
+      "amount": "11.41亿",
+      "turnover": null,
+      "amplitude": 0.0,
+      "speed": 0.0,
+      "signal_tags": [
+        "接近涨停",
+        "成交额10亿+"
+      ],
+      "reason": "涨跌幅 10.0%；成交额约 11.41亿；换手率 -%。综合动量、成交额、换手率、涨速和活跃度排序，数据源：东方财富A股行情。"
+    }
+  ]
+}
